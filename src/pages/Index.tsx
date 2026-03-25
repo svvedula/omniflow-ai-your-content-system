@@ -32,9 +32,15 @@ const Index = () => {
         ideas: responseData.ideas || [],
         hooks: responseData.hooks || [],
         scripts: responseData.scripts || [],
+        longFormScripts: responseData.longFormScripts || [],
         captions: responseData.captions || [],
         hashtags: responseData.hashtags || [],
-        branding: responseData.branding || { names: [], styleDirection: "" },
+        branding: {
+          names: responseData.branding?.names || [],
+          styleDirection: responseData.branding?.styleDirection || "",
+          logoConcept: responseData.branding?.logoConcept || "",
+          bannerConcept: responseData.branding?.bannerConcept || "",
+        },
       };
 
       setResult(system);
@@ -61,7 +67,7 @@ const Index = () => {
           >
             ← New System
           </button>
-          <CreatorOutput data={result} />
+          <CreatorOutput data={result} onUpdateData={setResult} />
         </div>
       ) : (
         <div className="flex items-center justify-center min-h-[calc(100vh-6rem)]">
