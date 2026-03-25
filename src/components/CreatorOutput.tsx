@@ -2,12 +2,10 @@ import {
   Lightbulb, Zap, FileText, Hash, Palette, MessageSquare, BookOpen, Image,
 } from "lucide-react";
 import { OutputSection, CopyableBlock } from "@/components/OutputSection";
+import { BrandingImageSection } from "@/components/output/BrandingImageSection";
+import { VideoPromptsSection } from "@/components/output/VideoPromptsSection";
 import { motion } from "framer-motion";
 import type { ContentSystem } from "@/lib/types";
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { toast } from "@/hooks/use-toast";
 
 interface CreatorOutputProps {
   data: ContentSystem;
@@ -15,42 +13,11 @@ interface CreatorOutputProps {
 }
 
 export function CreatorOutput({ data, onUpdateData }: CreatorOutputProps) {
-  const [generatingLogo, setGeneratingLogo] = useState(false);
-  const [generatingBanner, setGeneratingBanner] = useState(false);
-
-  const handleGenerateImage = async (type: "logo" | "banner") => {
-    const setter = type === "logo" ? setGeneratingLogo : setGeneratingBanner;
-    setter(true);
-
-    try {
-      const brandName = data.branding.names[0] || data.niche;
-      const concept = type === "logo" ? data.branding.logoConcept : data.branding.bannerConcept;
-
-      const { data: responseData, error } = await supabase.functions.invoke("generate-logo", {
-        body: { type, concept, brandName, niche: data.niche },
-      });
-
-      if (error) throw new Error(error.message);
-      if (responseData?.error) throw new Error(responseData.error);
-
-      const updated = {
-        ...data,
-        branding: {
-          ...data.branding,
-          [type === "logo" ? "logoUrl" : "bannerUrl"]: responseData.imageUrl,
-        },
-      };
-      onUpdateData(updated);
-    } catch (err) {
-      console.error(`${type} generation error:`, err);
-      toast({
-        title: `${type === "logo" ? "Logo" : "Banner"} Generation Failed`,
-        description: err instanceof Error ? err.message : "Something went wrong",
-        variant: "destructive",
-      });
-    } finally {
-      setter(false);
-    }
+  const handleBrandingUpdate = (updates: Partial<ContentSystem["branding"]>) => {
+    onUpdateData({
+      ...data,
+      branding: { ...data.branding, ...updates },
+    });
   };
 
   return (
@@ -169,63 +136,27 @@ export function CreatorOutput({ data, onUpdateData }: CreatorOutputProps) {
       {/* Logo & Banner */}
       <OutputSection title="Logo & Banner" icon={<Image className="h-4 w-4" />} delay={0.55}>
         <div className="space-y-6">
-          {/* Logo */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Logo</p>
-              {!data.branding.logoUrl && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleGenerateImage("logo")}
-                  disabled={generatingLogo}
-                  className="text-xs"
-                >
-                  {generatingLogo ? "Generating..." : "Generate Logo"}
-                </Button>
-              )}
-            </div>
-            {data.branding.logoConcept && !data.branding.logoUrl && (
-              <p className="text-sm text-muted-foreground bg-background/40 rounded-lg p-3 border border-border/30 mb-2">
-                Concept: {data.branding.logoConcept}
-              </p>
-            )}
-            {data.branding.logoUrl && (
-              <div className="rounded-lg overflow-hidden border border-border/30 bg-background/40 p-4 flex justify-center">
-                <img src={data.branding.logoUrl} alt="Generated logo" className="max-h-48 object-contain rounded-lg" />
-              </div>
-            )}
-          </div>
-
-          {/* Banner */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Banner</p>
-              {!data.branding.bannerUrl && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleGenerateImage("banner")}
-                  disabled={generatingBanner}
-                  className="text-xs"
-                >
-                  {generatingBanner ? "Generating..." : "Generate Banner"}
-                </Button>
-              )}
-            </div>
-            {data.branding.bannerConcept && !data.branding.bannerUrl && (
-              <p className="text-sm text-muted-foreground bg-background/40 rounded-lg p-3 border border-border/30 mb-2">
-                Concept: {data.branding.bannerConcept}
-              </p>
-            )}
-            {data.branding.bannerUrl && (
-              <div className="rounded-lg overflow-hidden border border-border/30 bg-background/40 p-2">
-                <img src={data.branding.bannerUrl} alt="Generated banner" className="w-full object-cover rounded-lg" />
-              </div>
-            )}
-          </div>
+          <BrandingImageSection
+            type="logo"
+            concept={data.branding.logoConcept}
+            imageUrl={data.branding.logoUrl}
+            brandName={data.branding.names[0] || data.niche}
+            niche={data.niche}
+            onUpdate={handleBrandingUpdate}
+          />
+          <BrandingImageSection
+            type="banner"
+            concept={data.branding.bannerConcept}
+            imageUrl={data.branding.bannerUrl}
+            brandName={data.branding.names[0] || data.niche}
+            niche={data.niche}
+            onUpdate={handleBrandingUpdate}
+          />
         </div>
       </OutputSection>
+
+      {/* Video Prompts */}
+      <VideoPromptsSection data={data} onUpdateData={onUpdateData} />
     </motion.div>
   );
 }
