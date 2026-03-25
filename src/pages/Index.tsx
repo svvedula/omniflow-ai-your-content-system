@@ -1,16 +1,41 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { CreatorInput } from "@/components/CreatorInput";
+import { CreatorOutput } from "@/components/CreatorOutput";
+import { generateMockSystem } from "@/lib/mockData";
+import type { ContentSystem } from "@/lib/types";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const Index = () => {
+  const [result, setResult] = useState<ContentSystem | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGenerate = async (data: { niche: string; audience: string; platform: string }) => {
+    setIsLoading(true);
+    // Simulate AI processing time
+    await new Promise((r) => setTimeout(r, 2000));
+    const system = generateMockSystem(data.niche, data.audience, data.platform);
+    setResult(system);
+    setIsLoading(false);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="p-6 md:p-10">
+      {result ? (
+        <div>
+          <button
+            onClick={() => setResult(null)}
+            className="mb-6 text-xs font-mono uppercase tracking-wider text-muted-foreground hover:text-primary transition-colors"
+          >
+            ← New System
+          </button>
+          <CreatorOutput data={result} />
+        </div>
+      ) : (
+        <div className="flex items-center justify-center min-h-[calc(100vh-6rem)]">
+          <CreatorInput onGenerate={handleGenerate} isLoading={isLoading} />
+        </div>
+      )}
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
