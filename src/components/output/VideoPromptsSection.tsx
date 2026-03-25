@@ -92,9 +92,9 @@ export function VideoPromptsSection({ data, onUpdateData }: VideoPromptsSectionP
         <div className="border-t border-border/30 pt-3 mt-3">
           <p className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-2">Recommended AI Video Tools</p>
           <div className="flex flex-wrap gap-2">
-            <a href="https://www.youtube.com/dream_screen" target="_blank" rel="noopener noreferrer"
+            <a href="https://studio.youtube.com" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-secondary border border-border/50 text-xs font-medium text-foreground hover:border-primary/30 transition-colors">
-              YouTube Dream Screen <ExternalLink className="h-3 w-3" />
+              YouTube Studio <ExternalLink className="h-3 w-3" />
             </a>
             <a href="https://invideo.io" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-secondary border border-border/50 text-xs font-medium text-foreground hover:border-primary/30 transition-colors">
