@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { CreatorInput } from "@/components/CreatorInput";
 import { CreatorOutput } from "@/components/CreatorOutput";
-import { generateMockSystem } from "@/lib/mockData";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 import type { ContentSystem } from "@/lib/types";
 
 const Index = () => {
@@ -10,11 +11,44 @@ const Index = () => {
 
   const handleGenerate = async (data: { niche: string; audience: string; platform: string }) => {
     setIsLoading(true);
-    // Simulate AI processing time
-    await new Promise((r) => setTimeout(r, 2000));
-    const system = generateMockSystem(data.niche, data.audience, data.platform);
-    setResult(system);
-    setIsLoading(false);
+
+    try {
+      const { data: responseData, error } = await supabase.functions.invoke("generate-content", {
+        body: { niche: data.niche, audience: data.audience, platform: data.platform },
+      });
+
+      if (error) {
+        throw new Error(error.message || "Failed to generate content");
+      }
+
+      if (responseData?.error) {
+        throw new Error(responseData.error);
+      }
+
+      const system: ContentSystem = {
+        niche: data.niche,
+        audience: data.audience,
+        platform: data.platform,
+        ideas: responseData.ideas || [],
+        hooks: responseData.hooks || [],
+        scripts: responseData.scripts || [],
+        captions: responseData.captions || [],
+        hashtags: responseData.hashtags || [],
+        branding: responseData.branding || { names: [], styleDirection: "" },
+      };
+
+      setResult(system);
+    } catch (err) {
+      console.error("Generation error:", err);
+      const message = err instanceof Error ? err.message : "Something went wrong";
+      toast({
+        title: "Generation Failed",
+        description: message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
