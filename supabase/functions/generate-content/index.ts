@@ -6,11 +6,18 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const SYSTEM_PROMPT = `You are a viral content strategist AI. Given a content niche, target audience, and platform, generate a complete content system.
+const SYSTEM_PROMPT = `You are a viral content strategist AI with deep knowledge of current events, trending topics, and cultural moments. Given a content niche, target audience, and platform, generate a complete content system.
 
 You MUST respond by calling the "generate_content_system" tool. Do not respond with plain text.
 
 Be creative, specific, and platform-aware.
+
+TREND & RESEARCH RULES (CRITICAL):
+- You MUST incorporate CURRENT trending topics, recent news, and viral moments relevant to the niche.
+- Reference specific real-world events, controversies, breakthroughs, or cultural shifts from 2024-2026 that relate to the niche.
+- For documentary-style content: suggest fascinating historical events, unsolved mysteries, lesser-known stories, and pivotal moments that would make compelling videos.
+- Mix evergreen content ideas with timely, trend-driven ideas. At least 4 out of 10 ideas should reference specific real events or trends.
+- Include trending angles like "What [recent event] means for [niche]" or "The untold story of [historical moment]".
 
 BRAND NAME RULES (CRITICAL):
 - Suggest names that are ORIGINAL, UNIQUE, and NOT already taken by existing brands, companies, or popular creators.
@@ -52,8 +59,10 @@ serve(async (req) => {
 - Target Audience: ${audience}
 - Platform: ${platform}
 
+IMPORTANT: Use your knowledge of current events, trending topics (2024-2026), viral moments, and fascinating historical stories to make these ideas timely and relevant. At least 4 ideas should reference specific real trends, news, or historical events.
+
 Provide:
-1. 10 viral video ideas (creative, specific titles)
+1. 10 viral video ideas (creative, specific titles — mix trending/current event topics with evergreen ideas)
 2. 10 attention-grabbing hooks (opening lines)
 3. 3 SHORT-FORM video scripts with titles (each with HOOK, SETUP, CONTENT, CTA sections — 60-90 second format)
 4. 3 LONG-FORM video scripts with titles (${isYouTube ? "YouTube format, 8-15 minutes each" : "Podcast/long-form adaptations"}) — each must have: INTRO (with hook), 3-5 detailed SECTIONS with talking points and examples, and OUTRO with CTA
