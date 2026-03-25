@@ -16,4 +16,5 @@ export interface ContentSystem {
     logoUrl?: string;
     bannerUrl?: string;
   };
+  videoPrompts?: { title: string; prompt: string; tool?: string }[];
 }
