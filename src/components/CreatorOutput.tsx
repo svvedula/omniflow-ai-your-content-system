@@ -3,6 +3,7 @@ import {
 } from "lucide-react";
 import { OutputSection, CopyableBlock } from "@/components/OutputSection";
 import { BrandingImageSection } from "@/components/output/BrandingImageSection";
+import { ContentEditor } from "@/components/output/ContentEditor";
 import { VideoPromptsSection } from "@/components/output/VideoPromptsSection";
 import { motion } from "framer-motion";
 import type { ContentSystem } from "@/lib/types";
@@ -157,6 +158,9 @@ export function CreatorOutput({ data, onUpdateData }: CreatorOutputProps) {
 
       {/* Video Prompts */}
       <VideoPromptsSection data={data} onUpdateData={onUpdateData} />
+
+      {/* AI Content Editor */}
+      <ContentEditor data={data} onUpdateData={onUpdateData} />
     </motion.div>
   );
 }
