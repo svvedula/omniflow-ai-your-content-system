@@ -158,6 +158,9 @@ export function CreatorOutput({ data, onUpdateData }: CreatorOutputProps) {
 
       {/* Video Prompts */}
       <VideoPromptsSection data={data} onUpdateData={onUpdateData} />
+
+      {/* AI Content Editor */}
+      <ContentEditor data={data} onUpdateData={onUpdateData} />
     </motion.div>
   );
 }
