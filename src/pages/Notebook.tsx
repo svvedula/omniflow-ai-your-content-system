@@ -165,36 +165,49 @@ const Notebook = () => {
               <p className="text-sm">No chat sessions yet. Start chatting in Creator or Developer mode!</p>
             </div>
           ) : (
-            filteredSessions.map((session, i) => (
-              <motion.div
-                key={session.id}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className="glass rounded-xl p-4 flex items-center justify-between group hover:glow-border transition-all duration-300"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className={`h-8 w-8 shrink-0 rounded-lg flex items-center justify-center ${
-                    session.mode === "developer" ? "bg-emerald-500/10 border border-emerald-500/20" : "bg-primary/10 border border-primary/20"
-                  }`}>
-                    {session.mode === "developer" ? <Code2 className="h-4 w-4 text-emerald-400" /> : <Sparkles className="h-4 w-4 text-primary" />}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">{session.title}</p>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <Badge variant="secondary" className="text-[10px] px-1.5 py-0">{session.mode}</Badge>
-                      <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-                        <Clock className="h-2.5 w-2.5" />
-                        {format(new Date(session.updated_at), "MMM d, h:mm a")}
-                      </span>
+              filteredSessions.map((session, i) => (
+                <motion.div
+                  key={session.id}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="glass rounded-xl p-4 flex items-center justify-between group hover:glow-border transition-all duration-300"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className={`h-8 w-8 shrink-0 rounded-lg flex items-center justify-center ${
+                      session.mode === "developer" ? "bg-emerald-500/10 border border-emerald-500/20" : "bg-primary/10 border border-primary/20"
+                    }`}>
+                      {session.mode === "developer" ? <Code2 className="h-4 w-4 text-emerald-400" /> : <Sparkles className="h-4 w-4 text-primary" />}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{session.title}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <Badge variant="secondary" className="text-[10px] px-1.5 py-0">{session.mode}</Badge>
+                        <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                          <Clock className="h-2.5 w-2.5" />
+                          {format(new Date(session.updated_at), "MMM d, h:mm a")}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 h-7 w-7 text-destructive" onClick={() => deleteSession(session.id)}>
-                  <Trash2 className="h-3.5 w-3.5" />
-                </Button>
-              </motion.div>
-            ))
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="opacity-0 group-hover:opacity-100 h-7 text-xs gap-1 text-primary"
+                      onClick={() => {
+                        const route = session.mode === "developer" ? "/developer" : "/";
+                        navigate(`${route}?session=${session.id}`);
+                      }}
+                    >
+                      <Play className="h-3 w-3" /> Resume
+                    </Button>
+                    <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 h-7 w-7 text-destructive" onClick={() => deleteSession(session.id)}>
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                </motion.div>
+              ))
           )}
         </TabsContent>
 
