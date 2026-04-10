@@ -1,7 +1,9 @@
 import {
-  Code2, Sparkles, Briefcase, LayoutGrid, Zap, Lock,
+  Code2, Sparkles, Briefcase, LayoutGrid, Zap, Lock, BookOpen, LogOut, LogIn,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -23,9 +25,15 @@ const modes = [
   { title: "Workspace Mode", url: "#", icon: LayoutGrid, active: false },
 ];
 
+const tools = [
+  { title: "Notebook", url: "/notebook", icon: BookOpen },
+];
+
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border/50">
@@ -52,21 +60,9 @@ export function AppSidebar() {
             <SidebarMenu>
               {modes.map((mode) => (
                 <SidebarMenuItem key={mode.title}>
-                  <SidebarMenuButton
-                    asChild={mode.active}
-                    className={
-                      mode.active
-                        ? ""
-                        : "opacity-40 cursor-not-allowed"
-                    }
-                  >
+                  <SidebarMenuButton asChild={mode.active} className={mode.active ? "" : "opacity-40 cursor-not-allowed"}>
                     {mode.active ? (
-                      <NavLink
-                        to={mode.url}
-                        end
-                        className="hover:bg-sidebar-accent/50"
-                        activeClassName="bg-primary/10 text-primary border border-primary/20"
-                      >
+                      <NavLink to={mode.url} end className="hover:bg-sidebar-accent/50" activeClassName="bg-primary/10 text-primary border border-primary/20">
                         <mode.icon className="mr-2 h-4 w-4" />
                         {!collapsed && <span>{mode.title}</span>}
                       </NavLink>
@@ -77,8 +73,7 @@ export function AppSidebar() {
                           <>
                             <span className="flex-1">{mode.title}</span>
                             <span className="flex items-center gap-1 text-[9px] font-mono uppercase tracking-wider text-muted-foreground/50">
-                              <Lock className="h-2.5 w-2.5" />
-                              Soon
+                              <Lock className="h-2.5 w-2.5" />Soon
                             </span>
                           </>
                         )}
@@ -90,13 +85,48 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-[10px] font-mono tracking-widest uppercase text-muted-foreground/60">
+            Tools
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {tools.map((tool) => (
+                <SidebarMenuItem key={tool.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink to={tool.url} className="hover:bg-sidebar-accent/50" activeClassName="bg-primary/10 text-primary border border-primary/20">
+                      <tool.icon className="mr-2 h-4 w-4" />
+                      {!collapsed && <span>{tool.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4">
+      <SidebarFooter className="p-4 space-y-2">
+        {user ? (
+          <button
+            onClick={() => signOut()}
+            className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors w-full"
+          >
+            <LogOut className="h-3.5 w-3.5" />
+            {!collapsed && <span>Sign Out</span>}
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate("/auth")}
+            className="flex items-center gap-2 text-xs text-primary hover:text-primary/80 transition-colors w-full"
+          >
+            <LogIn className="h-3.5 w-3.5" />
+            {!collapsed && <span>Sign In</span>}
+          </button>
+        )}
         {!collapsed && (
-          <p className="text-[10px] text-muted-foreground/40 font-mono text-center">
-            v0.1.0 — MVP
-          </p>
+          <p className="text-[10px] text-muted-foreground/40 font-mono text-center">v0.2.0 — Notebook</p>
         )}
       </SidebarFooter>
     </Sidebar>
