@@ -29,6 +29,7 @@ type PinnedMessage = { id: string; content: string; role: string; highlight_colo
 
 const Notebook = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [sessions, setSessions] = useState<Session[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
   const [pinnedMessages, setPinnedMessages] = useState<PinnedMessage[]>([]);
