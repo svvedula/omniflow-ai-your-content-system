@@ -105,6 +105,9 @@ export function VideoPromptsSection({ data, onUpdateData }: VideoPromptsSectionP
               Runway <ExternalLink className="h-3 w-3" />
             </a>
           </div>
+          <p className="text-xs text-muted-foreground mt-2 italic">
+            ⚠️ Note: Some links may not open directly from here. If a link doesn't work, try copying the URL and pasting it into your browser's address bar manually.
+          </p>
         </div>
       </div>
     </OutputSection>
