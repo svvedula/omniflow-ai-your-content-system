@@ -49,6 +49,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
+        max_tokens: 16000,
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           {
@@ -87,9 +88,24 @@ Return a JSON object with: hook, fullScript, stageDirections, notes`,
 
     if (!raw) throw new Error("No response from AI");
 
-    // Extract JSON from response (handle markdown code blocks)
-    const jsonMatch = raw.match(/```(?:json)?\s*([\s\S]*?)```/) || [null, raw];
-    const parsed = JSON.parse(jsonMatch[1]!.trim());
+    // Robust JSON extraction
+    let cleaned = raw.replace(/```json\s*/gi, "").replace(/```\s*/g, "").trim();
+    const jsonStart = cleaned.indexOf("{");
+    const jsonEnd = cleaned.lastIndexOf("}");
+    if (jsonStart === -1 || jsonEnd === -1) throw new Error("No JSON found in response");
+    cleaned = cleaned.substring(jsonStart, jsonEnd + 1);
+
+    let parsed;
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch {
+      // Fix common issues: trailing commas, control chars
+      cleaned = cleaned
+        .replace(/,\s*}/g, "}")
+        .replace(/,\s*]/g, "]")
+        .replace(/[\x00-\x1F\x7F]/g, (ch) => ch === "\n" || ch === "\t" ? ch : "");
+      parsed = JSON.parse(cleaned);
+    }
 
     return new Response(JSON.stringify(parsed), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
