@@ -93,12 +93,20 @@ export function NotebookPanel({ open, onClose }: { open: boolean; onClose: () =>
                   ) : (
                     <div className="space-y-1.5">
                       {sessions.map((s) => (
-                        <div key={s.id} className="flex items-center gap-2 p-2 rounded-lg hover:bg-secondary/50 transition-colors cursor-pointer group">
+                        <div
+                          key={s.id}
+                          className="flex items-center gap-2 p-2 rounded-lg hover:bg-secondary/50 transition-colors cursor-pointer group"
+                          onClick={() => {
+                            const route = s.mode === "developer" ? "/developer" : "/";
+                            navigate(`${route}?session=${s.id}`);
+                            onClose();
+                          }}
+                        >
                           <div className="flex-1 min-w-0">
                             <p className="text-xs font-medium text-foreground truncate">{s.title}</p>
                             <span className="text-[9px] text-muted-foreground">{s.mode} · {format(new Date(s.updated_at), "MMM d")}</span>
                           </div>
-                          <ChevronRight className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <Play className="h-3 w-3 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                       ))}
                     </div>
