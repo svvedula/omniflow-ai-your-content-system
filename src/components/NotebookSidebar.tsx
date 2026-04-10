@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { BookOpen, Pin, MessageSquare, X, ChevronRight } from "lucide-react";
+import { BookOpen, Pin, MessageSquare, X, ChevronRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,7 @@ type RecentSession = { id: string; title: string; mode: string; updated_at: stri
 
 export function NotebookPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [pinned, setPinned] = useState<PinnedMsg[]>([]);
   const [sessions, setSessions] = useState<RecentSession[]>([]);
 
