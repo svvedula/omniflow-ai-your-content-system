@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import {
-  BookOpen, Pin, MessageSquare, Search, Plus, Tag, Trash2, Clock, Sparkles, Code2,
+  BookOpen, Pin, MessageSquare, Search, Plus, Tag, Trash2, Clock, Sparkles, Code2, Play,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
