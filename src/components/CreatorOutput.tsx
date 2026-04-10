@@ -5,6 +5,7 @@ import { OutputSection, CopyableBlock } from "@/components/OutputSection";
 import { BrandingImageSection } from "@/components/output/BrandingImageSection";
 import { ContentEditor } from "@/components/output/ContentEditor";
 import { VideoPromptsSection } from "@/components/output/VideoPromptsSection";
+import { ExpandableScript } from "@/components/output/ExpandableScript";
 import { motion } from "framer-motion";
 import type { ContentSystem } from "@/lib/types";
 
@@ -76,14 +77,17 @@ export function CreatorOutput({ data, onUpdateData }: CreatorOutputProps) {
       {/* Long-Form Scripts */}
       {data.longFormScripts.length > 0 && (
         <OutputSection title={`Long-Form ${data.platform === "YouTube" ? "YouTube" : ""} Scripts`} icon={<BookOpen className="h-4 w-4" />} delay={0.35}>
-          <div className="space-y-4">
+          <div className="space-y-6">
             {data.longFormScripts.map((script, i) => (
-              <div key={i}>
-                <p className="text-xs font-mono uppercase tracking-wider text-primary mb-2">
-                  Long-Form {i + 1}: {script.title}
-                </p>
-                <CopyableBlock text={script.content} />
-              </div>
+              <ExpandableScript
+                key={i}
+                index={i}
+                title={script.title}
+                content={script.content}
+                niche={data.niche}
+                audience={data.audience}
+                platform={data.platform}
+              />
             ))}
           </div>
         </OutputSection>
