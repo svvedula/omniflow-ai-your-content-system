@@ -3,12 +3,14 @@ import {
   LayoutGrid, Table2, ListChecks, FileText, BarChart3,
   Send, Loader2, Download, ArrowLeft, TrendingUp, TrendingDown, Minus,
   AlertTriangle, Clock, User as UserIcon, ChevronDown, ChevronUp,
-  ImagePlus, X,
+  ImagePlus, X, Coins,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useCredits } from "@/hooks/useCredits";
+import { useNavigate } from "react-router-dom";
 
 type Tool = "table" | "actions" | "summarize" | "insights";
 
@@ -66,6 +68,8 @@ const BODY_KEY_MAP: Record<Tool, string> = {
 
 const Workspace = () => {
   const [activeTool, setActiveTool] = useState<Tool | null>(null);
+  const { balance, spend, hasEnough } = useCredits();
+  const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
