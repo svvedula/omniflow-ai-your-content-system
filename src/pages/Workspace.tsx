@@ -183,8 +183,8 @@ const Workspace = () => {
             {TOOLS.map((tool) => (
               <button
                 key={tool.id}
-                onClick={() => setActiveTool(tool.id)}
-                className={`group text-left p-6 rounded-xl border ${tool.borderColor} ${tool.bgColor} hover:scale-[1.02] transition-all duration-200`}
+                onClick={() => handleSelectTool(tool.id)}
+                className={`group text-left p-6 rounded-xl border ${tool.borderColor} ${tool.bgColor} hover:scale-[1.02] transition-all duration-200 ${!hasEnough(1.5) ? "opacity-50" : ""}`}
               >
                 <div className="flex items-center gap-3 mb-2">
                   <div className={`p-2.5 rounded-lg ${tool.bgColor}`}>
