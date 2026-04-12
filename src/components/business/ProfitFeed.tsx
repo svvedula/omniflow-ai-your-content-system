@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Scan, RefreshCw, TrendingUp, Newspaper, Lightbulb, ArrowRightLeft,
   ExternalLink, ChevronDown, ChevronUp, DollarSign, Loader2, Zap,
@@ -135,11 +135,19 @@ const OpportunityCard = ({ opp }: { opp: Opportunity }) => {
   );
 };
 
-const ProfitFeed = () => {
+const ProfitFeed = ({ autoScan = false }: { autoScan?: boolean }) => {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [isScanning, setIsScanning] = useState(false);
   const [niche, setNiche] = useState("");
   const [hasScanned, setHasScanned] = useState(false);
+  const didAutoScan = useRef(false);
+
+  useEffect(() => {
+    if (autoScan && !didAutoScan.current) {
+      didAutoScan.current = true;
+      scanMarket();
+    }
+  }, [autoScan]);
 
   const scanMarket = async () => {
     setIsScanning(true);
