@@ -156,9 +156,11 @@ const Workspace = () => {
         <Button variant="ghost" size="sm" onClick={handleBack} className="h-7 text-xs">
           <ArrowLeft className="h-3 w-3 mr-1" /> Back
         </Button>
-        <div className={`p-1.5 rounded-lg ${currentTool!.bgColor}`}>
-          <currentTool!.icon className={`h-4 w-4 ${currentTool!.color}`} />
-        </div>
+        {currentTool && (
+          <div className={`p-1.5 rounded-lg ${currentTool.bgColor}`}>
+            {(() => { const Icon = currentTool.icon; return <Icon className={`h-4 w-4 ${currentTool.color}`} />; })()}
+          </div>
+        )}
         <span className="text-sm font-semibold text-foreground">{currentTool!.title}</span>
       </div>
 
