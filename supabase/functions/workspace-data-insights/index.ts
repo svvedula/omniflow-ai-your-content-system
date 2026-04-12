@@ -10,8 +10,8 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { data } = await req.json();
-    if (!data?.trim()) {
+    const { data, image } = await req.json();
+    if (!data?.trim() && !image) {
       return new Response(JSON.stringify({ error: "No data provided" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -19,6 +19,13 @@ serve(async (req) => {
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    const userContent: any[] = [];
+    if (data?.trim()) userContent.push({ type: "text", text: `Analyze this data and provide insights:\n\n${data}` });
+    if (image) {
+      if (!data?.trim()) userContent.push({ type: "text", text: "Analyze the data in this image and provide insights:" });
+      userContent.push({ type: "image_url", image_url: { url: image } });
+    }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -28,7 +35,7 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are a data analysis AI. The user will paste raw data (numbers, tables, lists, CSV-like content). You must:
+            content: `You are a data analysis AI. The user will paste raw data (numbers, tables, lists, CSV-like content) or provide an image containing data. You must:
 1. Identify patterns, trends, and anomalies
 2. Calculate key metrics where possible
 3. Provide actionable insights
@@ -36,7 +43,7 @@ serve(async (req) => {
 
 Be specific with numbers. Don't be vague. Call the "data_insights" tool.`,
           },
-          { role: "user", content: `Analyze this data and provide insights:\n\n${data}` },
+          { role: "user", content: userContent.length === 1 && userContent[0].type === "text" ? userContent[0].text : userContent },
         ],
         tools: [
           {
