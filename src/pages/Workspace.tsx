@@ -3,12 +3,14 @@ import {
   LayoutGrid, Table2, ListChecks, FileText, BarChart3,
   Send, Loader2, Download, ArrowLeft, TrendingUp, TrendingDown, Minus,
   AlertTriangle, Clock, User as UserIcon, ChevronDown, ChevronUp,
-  ImagePlus, X,
+  ImagePlus, X, Coins,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useCredits } from "@/hooks/useCredits";
+import { useNavigate } from "react-router-dom";
 
 type Tool = "table" | "actions" | "summarize" | "insights";
 
@@ -66,6 +68,8 @@ const BODY_KEY_MAP: Record<Tool, string> = {
 
 const Workspace = () => {
   const [activeTool, setActiveTool] = useState<Tool | null>(null);
+  const { balance, spend, hasEnough } = useCredits();
+  const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
@@ -101,8 +105,26 @@ const Workspace = () => {
 
   const currentTool = TOOLS.find((t) => t.id === activeTool);
 
+  const handleSelectTool = async (toolId: Tool) => {
+    if (!hasEnough(1.5)) {
+      toast({ title: "Not enough credits", description: "You need 1.5 credits to open a tool.", variant: "destructive" });
+      navigate("/pricing");
+      return;
+    }
+    const ok = await spend(1.5, "tool_select", `Opened ${toolId} tool`);
+    if (ok) setActiveTool(toolId);
+  };
+
   const handleProcess = async () => {
     if ((!input.trim() && !imageBase64) || !activeTool || isLoading) return;
+    if (!hasEnough(0.5)) {
+      toast({ title: "Not enough credits", description: "You need 0.5 credits per interaction.", variant: "destructive" });
+      navigate("/pricing");
+      return;
+    }
+    const ok = await spend(0.5, "interaction", `Used ${activeTool} tool`);
+    if (!ok) return;
+
     setIsLoading(true);
     setResult(null);
 
@@ -161,8 +183,8 @@ const Workspace = () => {
             {TOOLS.map((tool) => (
               <button
                 key={tool.id}
-                onClick={() => setActiveTool(tool.id)}
-                className={`group text-left p-6 rounded-xl border ${tool.borderColor} ${tool.bgColor} hover:scale-[1.02] transition-all duration-200`}
+                onClick={() => handleSelectTool(tool.id)}
+                className={`group text-left p-6 rounded-xl border ${tool.borderColor} ${tool.bgColor} hover:scale-[1.02] transition-all duration-200 ${!hasEnough(1.5) ? "opacity-50" : ""}`}
               >
                 <div className="flex items-center gap-3 mb-2">
                   <div className={`p-2.5 rounded-lg ${tool.bgColor}`}>
