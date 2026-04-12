@@ -274,50 +274,15 @@ const Business = () => {
               </div>
             ))}
           </div>
+
+          {/* Profit Feed - inline on dashboard */}
+          <ProfitFeed autoScan />
         </div>
       </div>
     );
   }
 
-  // Profit Feed view
-  if (activeSection === "profit-feed") {
-    return (
-      <div className="flex flex-col h-[calc(100vh-3rem)]">
-        {/* Section Header Bar */}
-        <div className="px-4 py-3 border-b border-border/30 bg-secondary/20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-1.5 rounded-lg bg-primary/10">
-              <Signal className="h-4 w-4 text-primary" />
-            </div>
-            <span className="text-sm font-semibold text-foreground">Profit Feed</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="flex gap-1">
-              {SECTIONS.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => setActiveSection(s.id)}
-                  className={`px-2 py-1 rounded text-[10px] font-mono uppercase tracking-wider transition-colors ${
-                    activeSection === s.id
-                      ? `${s.bgColor} ${s.color} border ${s.borderColor}`
-                      : "text-muted-foreground/50 hover:text-muted-foreground"
-                  }`}
-                >
-                  {s.id.slice(0, 4)}
-                </button>
-              ))}
-            </div>
-            <Button variant="ghost" size="sm" onClick={handleNewChat} className="h-7 text-xs text-muted-foreground">
-              <X className="h-3 w-3 mr-1" /> New
-            </Button>
-          </div>
-        </div>
-        <div className="flex-1 overflow-auto p-4">
-          <ProfitFeed />
-        </div>
-      </div>
-    );
-  }
+
 
   // Chat view when a section is active
   const currentSection = SECTIONS.find((s) => s.id === activeSection);
