@@ -5,6 +5,7 @@ import { NotebookPanel } from "@/components/NotebookSidebar";
 import { BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { CreditDisplay } from "@/components/CreditDisplay";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const [notebookOpen, setNotebookOpen] = useState(false);
@@ -17,12 +18,15 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="flex-1 flex flex-col min-w-0">
           <header className="h-12 flex items-center border-b border-border/50 px-2 shrink-0 justify-between">
             <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
-            {user && (
-              <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-muted-foreground" onClick={() => setNotebookOpen(true)}>
-                <BookOpen className="h-3.5 w-3.5" />
-                Notebook
-              </Button>
-            )}
+            <div className="flex items-center gap-2">
+              {user && <CreditDisplay />}
+              {user && (
+                <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-muted-foreground" onClick={() => setNotebookOpen(true)}>
+                  <BookOpen className="h-3.5 w-3.5" />
+                  Notebook
+                </Button>
+              )}
+            </div>
           </header>
           <main className="flex-1 overflow-auto">
             {children}

@@ -11,6 +11,7 @@ import Business from "./pages/Business.tsx";
 import Notebook from "./pages/Notebook.tsx";
 import Workspace from "./pages/Workspace.tsx";
 import Auth from "./pages/Auth.tsx";
+import Pricing from "./pages/Pricing.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
                   <Route path="/business" element={<Business />} />
                   <Route path="/notebook" element={<Notebook />} />
                   <Route path="/workspace" element={<Workspace />} />
+                  <Route path="/pricing" element={<Pricing />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </AppLayout>
