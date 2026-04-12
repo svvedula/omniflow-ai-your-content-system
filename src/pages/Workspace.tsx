@@ -171,7 +171,7 @@ const Workspace = () => {
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={currentTool!.placeholder}
+              placeholder={currentTool?.placeholder}
               className="min-h-[160px] bg-secondary/30 border-border/30 text-sm font-mono"
             />
             <div className="flex justify-end">
