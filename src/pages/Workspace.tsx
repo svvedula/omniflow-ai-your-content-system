@@ -161,7 +161,7 @@ const Workspace = () => {
             {(() => { const Icon = currentTool.icon; return <Icon className={`h-4 w-4 ${currentTool.color}`} />; })()}
           </div>
         )}
-        <span className="text-sm font-semibold text-foreground">{currentTool!.title}</span>
+        <span className="text-sm font-semibold text-foreground">{currentTool?.title}</span>
       </div>
 
       <div className="flex-1 overflow-auto p-4">
