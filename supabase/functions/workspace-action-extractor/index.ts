@@ -10,8 +10,8 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { text } = await req.json();
-    if (!text?.trim()) {
+    const { text, image } = await req.json();
+    if (!text?.trim() && !image) {
       return new Response(JSON.stringify({ error: "No text provided" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -19,6 +19,13 @@ serve(async (req) => {
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    const userContent: any[] = [];
+    if (text?.trim()) userContent.push({ type: "text", text });
+    if (image) {
+      if (!text?.trim()) userContent.push({ type: "text", text: "Extract action items from this image:" });
+      userContent.push({ type: "image_url", image_url: { url: image } });
+    }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -28,7 +35,7 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are an action extraction AI. The user will paste text (emails, messages, notes, meeting transcripts). You must extract:
+            content: `You are an action extraction AI. The user will paste text (emails, messages, notes, meeting transcripts) or provide an image. You must extract:
 1. Clear action items with owners if mentioned
 2. Deadlines (exact or inferred)
 3. Priority levels (high/medium/low)
@@ -36,7 +43,7 @@ serve(async (req) => {
 
 Be specific and actionable. Don't be vague. Call the "extract_actions" tool.`,
           },
-          { role: "user", content: text },
+          { role: "user", content: userContent.length === 1 && userContent[0].type === "text" ? userContent[0].text : userContent },
         ],
         tools: [
           {

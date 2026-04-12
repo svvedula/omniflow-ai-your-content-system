@@ -10,8 +10,8 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { notes } = await req.json();
-    if (!notes?.trim()) {
+    const { notes, image } = await req.json();
+    if (!notes?.trim() && !image) {
       return new Response(JSON.stringify({ error: "No notes provided" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -19,6 +19,13 @@ serve(async (req) => {
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    const userContent: any[] = [];
+    if (notes?.trim()) userContent.push({ type: "text", text: notes });
+    if (image) {
+      if (!notes?.trim()) userContent.push({ type: "text", text: "Summarize and create a plan from the content in this image:" });
+      userContent.push({ type: "image_url", image_url: { url: image } });
+    }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -28,7 +35,7 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are a planning AI. The user will paste chaotic, messy notes. You must:
+            content: `You are a planning AI. The user will paste chaotic, messy notes or provide an image. You must:
 1. Summarize the key points clearly
 2. Organize them into logical categories
 3. Create an actionable step-by-step plan with timeline suggestions
@@ -36,7 +43,7 @@ serve(async (req) => {
 
 Be concise but thorough. Call the "summarize_and_plan" tool.`,
           },
-          { role: "user", content: notes },
+          { role: "user", content: userContent.length === 1 && userContent[0].type === "text" ? userContent[0].text : userContent },
         ],
         tools: [
           {

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   LayoutGrid, Table2, ListChecks, FileText, BarChart3,
   Send, Loader2, Download, ArrowLeft, TrendingUp, TrendingDown, Minus,
   AlertTriangle, Clock, User as UserIcon, ChevronDown, ChevronUp,
+  ImagePlus, X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -68,17 +69,48 @@ const Workspace = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [imageBase64, setImageBase64] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "Invalid file", description: "Please upload an image file", variant: "destructive" });
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Max 10MB", variant: "destructive" });
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result as string;
+      setImagePreview(dataUrl);
+      setImageBase64(dataUrl);
+    };
+    reader.readAsDataURL(file);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removeImage = () => {
+    setImageBase64(null);
+    setImagePreview(null);
+  };
 
   const currentTool = TOOLS.find((t) => t.id === activeTool);
 
   const handleProcess = async () => {
-    if (!input.trim() || !activeTool || isLoading) return;
+    if ((!input.trim() && !imageBase64) || !activeTool || isLoading) return;
     setIsLoading(true);
     setResult(null);
 
     try {
+      const body: Record<string, string> = { [BODY_KEY_MAP[activeTool]]: input };
+      if (imageBase64) body.image = imageBase64;
       const { data, error } = await supabase.functions.invoke(EDGE_FN_MAP[activeTool], {
-        body: { [BODY_KEY_MAP[activeTool]]: input },
+        body,
       });
       if (error) throw error;
       setResult(data);
@@ -108,6 +140,7 @@ const Workspace = () => {
     setActiveTool(null);
     setInput("");
     setResult(null);
+    removeImage();
   };
 
   // Dashboard
@@ -174,8 +207,22 @@ const Workspace = () => {
               placeholder={currentTool?.placeholder}
               className="min-h-[160px] bg-secondary/30 border-border/30 text-sm font-mono"
             />
-            <div className="flex justify-end">
-              <Button onClick={handleProcess} disabled={!input.trim() || isLoading} className="gap-2">
+            {imagePreview && (
+              <div className="relative inline-block">
+                <img src={imagePreview} alt="Attached" className="h-24 rounded-lg border border-border/30 object-cover" />
+                <button onClick={removeImage} className="absolute -top-2 -right-2 p-0.5 rounded-full bg-destructive text-destructive-foreground">
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            )}
+            <div className="flex items-center justify-between">
+              <div>
+                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} className="gap-1.5 text-xs">
+                  <ImagePlus className="h-3.5 w-3.5" /> Attach Image
+                </Button>
+              </div>
+              <Button onClick={handleProcess} disabled={(!input.trim() && !imageBase64) || isLoading} className="gap-2">
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 {isLoading ? "Processing..." : "Process"}
               </Button>
