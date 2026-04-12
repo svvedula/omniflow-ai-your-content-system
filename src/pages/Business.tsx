@@ -13,7 +13,7 @@ import { useSession } from "@/hooks/useSession";
 import ReactMarkdown from "react-markdown";
 
 type Message = { role: "user" | "assistant"; content: string; id?: string };
-type Section = "planning" | "marketing" | "projects" | "general" | "profit-feed";
+type Section = "planning" | "marketing" | "projects" | "general";
 
 const SECTIONS = [
   {
@@ -56,20 +56,6 @@ const SECTIONS = [
       "Break my MVP into a 4-week sprint plan",
       "Create OKRs for next quarter",
       "Design a workflow for content production",
-    ],
-  },
-  {
-    id: "profit-feed" as Section,
-    title: "Profit Feed",
-    icon: Signal,
-    description: "AI market scanner",
-    color: "text-primary",
-    bgColor: "bg-primary/10",
-    borderColor: "border-primary/20",
-    prompts: [
-      "Scan for underpriced deals across platforms",
-      "Find trending products with resale potential",
-      "Discover news-driven business opportunities",
     ],
   },
 ];
