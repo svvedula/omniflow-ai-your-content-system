@@ -9,6 +9,7 @@ import Index from "./pages/Index.tsx";
 import Developer from "./pages/Developer.tsx";
 import Business from "./pages/Business.tsx";
 import Notebook from "./pages/Notebook.tsx";
+import Workspace from "./pages/Workspace.tsx";
 import Auth from "./pages/Auth.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -30,6 +31,7 @@ const App = () => (
                   <Route path="/developer" element={<Developer />} />
                   <Route path="/business" element={<Business />} />
                   <Route path="/notebook" element={<Notebook />} />
+                  <Route path="/workspace" element={<Workspace />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </AppLayout>

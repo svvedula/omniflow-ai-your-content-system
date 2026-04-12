@@ -22,7 +22,7 @@ const modes = [
   { title: "Creator Mode", url: "/", icon: Sparkles, active: true },
   { title: "Developer Mode", url: "/developer", icon: Code2, active: true },
   { title: "Business Mode", url: "/business", icon: Briefcase, active: true },
-  { title: "Workspace Mode", url: "#", icon: LayoutGrid, active: false },
+  { title: "Workspace Mode", url: "/workspace", icon: LayoutGrid, active: true },
 ];
 
 const tools = [
