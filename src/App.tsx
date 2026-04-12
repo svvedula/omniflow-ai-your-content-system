@@ -7,6 +7,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { AppLayout } from "@/components/AppLayout";
 import Index from "./pages/Index.tsx";
 import Developer from "./pages/Developer.tsx";
+import Business from "./pages/Business.tsx";
 import Notebook from "./pages/Notebook.tsx";
 import Auth from "./pages/Auth.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -27,6 +28,7 @@ const App = () => (
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/developer" element={<Developer />} />
+                  <Route path="/business" element={<Business />} />
                   <Route path="/notebook" element={<Notebook />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

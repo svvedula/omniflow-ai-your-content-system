@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
-export type SessionMode = "creator" | "developer";
+export type SessionMode = "creator" | "developer" | "business";
 
 export function useSession() {
   const { user } = useAuth();
