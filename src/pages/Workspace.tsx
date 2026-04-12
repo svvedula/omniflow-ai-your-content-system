@@ -105,8 +105,26 @@ const Workspace = () => {
 
   const currentTool = TOOLS.find((t) => t.id === activeTool);
 
+  const handleSelectTool = async (toolId: Tool) => {
+    if (!hasEnough(1.5)) {
+      toast({ title: "Not enough credits", description: "You need 1.5 credits to open a tool.", variant: "destructive" });
+      navigate("/pricing");
+      return;
+    }
+    const ok = await spend(1.5, "tool_select", `Opened ${toolId} tool`);
+    if (ok) setActiveTool(toolId);
+  };
+
   const handleProcess = async () => {
     if ((!input.trim() && !imageBase64) || !activeTool || isLoading) return;
+    if (!hasEnough(0.5)) {
+      toast({ title: "Not enough credits", description: "You need 0.5 credits per interaction.", variant: "destructive" });
+      navigate("/pricing");
+      return;
+    }
+    const ok = await spend(0.5, "interaction", `Used ${activeTool} tool`);
+    if (!ok) return;
+
     setIsLoading(true);
     setResult(null);
 
