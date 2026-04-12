@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   Briefcase, TrendingUp, Target, Rocket, Send, Bot, User, Loader2,
-  BarChart3, Megaphone, ClipboardList, Lightbulb, X,
+  BarChart3, Megaphone, ClipboardList, Lightbulb, X, Signal,
 } from "lucide-react";
+import ProfitFeed from "@/components/business/ProfitFeed";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
