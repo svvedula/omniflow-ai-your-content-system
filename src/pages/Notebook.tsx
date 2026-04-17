@@ -196,7 +196,12 @@ const Notebook = () => {
                       size="sm"
                       className="opacity-0 group-hover:opacity-100 h-7 text-xs gap-1 text-primary"
                       onClick={() => {
-                        const route = session.mode === "developer" ? "/developer" : "/";
+                        const route =
+                          session.mode === "developer"
+                            ? "/developer"
+                            : session.mode === "business"
+                            ? "/business"
+                            : "/";
                         navigate(`${route}?session=${session.id}`);
                       }}
                     >
