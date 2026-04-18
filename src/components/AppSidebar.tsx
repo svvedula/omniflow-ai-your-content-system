@@ -38,6 +38,8 @@ export function AppSidebar() {
   const collapsed = state === "collapsed";
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { isAdmin } = useAdminRole();
+  const toolsList = isAdmin ? [...tools, { title: "Admin", url: "/admin", icon: Shield }] : tools;
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border/50">
