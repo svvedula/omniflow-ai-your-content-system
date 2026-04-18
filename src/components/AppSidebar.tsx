@@ -98,7 +98,7 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {tools.map((tool) => (
+              {toolsList.map((tool) => (
                 <SidebarMenuItem key={tool.title}>
                   <SidebarMenuButton asChild>
                     <NavLink to={tool.url} className="hover:bg-sidebar-accent/50" activeClassName="bg-primary/10 text-primary border border-primary/20">
