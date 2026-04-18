@@ -85,6 +85,41 @@ export type Database = {
         }
         Relationships: []
       }
+      code_redemptions: {
+        Row: {
+          code_id: string
+          credits_granted: number
+          id: string
+          pro_days_granted: number
+          redeemed_at: string
+          user_id: string
+        }
+        Insert: {
+          code_id: string
+          credits_granted?: number
+          id?: string
+          pro_days_granted?: number
+          redeemed_at?: string
+          user_id: string
+        }
+        Update: {
+          code_id?: string
+          credits_granted?: number
+          id?: string
+          pro_days_granted?: number
+          redeemed_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "code_redemptions_code_id_fkey"
+            columns: ["code_id"]
+            isOneToOne: false
+            referencedRelation: "redeem_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       credit_transactions: {
         Row: {
           amount: number
@@ -111,6 +146,65 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      gift_purchases: {
+        Row: {
+          amount_cents: number | null
+          buyer_id: string
+          code_id: string | null
+          created_at: string
+          currency: string | null
+          id: string
+          message: string | null
+          paid_at: string | null
+          pro_days: number
+          recipient_email: string | null
+          recipient_name: string | null
+          redeemed_at: string | null
+          status: string
+          stripe_session_id: string | null
+        }
+        Insert: {
+          amount_cents?: number | null
+          buyer_id: string
+          code_id?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          message?: string | null
+          paid_at?: string | null
+          pro_days: number
+          recipient_email?: string | null
+          recipient_name?: string | null
+          redeemed_at?: string | null
+          status?: string
+          stripe_session_id?: string | null
+        }
+        Update: {
+          amount_cents?: number | null
+          buyer_id?: string
+          code_id?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          message?: string | null
+          paid_at?: string | null
+          pro_days?: number
+          recipient_email?: string | null
+          recipient_name?: string | null
+          redeemed_at?: string | null
+          status?: string
+          stripe_session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_purchases_code_id_fkey"
+            columns: ["code_id"]
+            isOneToOne: false
+            referencedRelation: "redeem_codes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notebook_notes: {
         Row: {
@@ -172,6 +266,7 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
+          pro_until: string | null
           updated_at: string
           user_id: string
         }
@@ -180,6 +275,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          pro_until?: string | null
           updated_at?: string
           user_id: string
         }
@@ -188,8 +284,57 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          pro_until?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      redeem_codes: {
+        Row: {
+          code: string
+          created_at: string
+          created_by: string | null
+          credits_reward: number
+          description: string | null
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          is_one_time_global: boolean
+          max_uses: number | null
+          pro_days_reward: number
+          source: string
+          use_count: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          created_by?: string | null
+          credits_reward?: number
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          is_one_time_global?: boolean
+          max_uses?: number | null
+          pro_days_reward?: number
+          source?: string
+          use_count?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          credits_reward?: number
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          is_one_time_global?: boolean
+          max_uses?: number | null
+          pro_days_reward?: number
+          source?: string
+          use_count?: number
         }
         Relationships: []
       }
@@ -220,12 +365,41 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
       grant_daily_credits: { Args: { p_user_id: string }; Returns: number }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      redeem_code: { Args: { p_code: string }; Returns: Json }
       spend_credits: {
         Args: {
           p_amount: number
@@ -237,7 +411,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -364,6 +538,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const

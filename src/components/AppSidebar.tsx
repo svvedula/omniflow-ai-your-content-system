@@ -1,6 +1,7 @@
 import {
-  Code2, Sparkles, Briefcase, LayoutGrid, Zap, Lock, BookOpen, LogOut, LogIn, Home,
+  Code2, Sparkles, Briefcase, LayoutGrid, Zap, Lock, BookOpen, LogOut, LogIn, Home, Gift, Ticket, Shield,
 } from "lucide-react";
+import { useAdminRole } from "@/hooks/useAdminRole";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +29,8 @@ const modes = [
 
 const tools = [
   { title: "Notebook", url: "/notebook", icon: BookOpen },
+  { title: "Redeem Code", url: "/redeem", icon: Ticket },
+  { title: "Gift Pro", url: "/gift", icon: Gift },
 ];
 
 export function AppSidebar() {
@@ -35,6 +38,8 @@ export function AppSidebar() {
   const collapsed = state === "collapsed";
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { isAdmin } = useAdminRole();
+  const toolsList = isAdmin ? [...tools, { title: "Admin", url: "/admin", icon: Shield }] : tools;
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border/50">
@@ -93,7 +98,7 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {tools.map((tool) => (
+              {toolsList.map((tool) => (
                 <SidebarMenuItem key={tool.title}>
                   <SidebarMenuButton asChild>
                     <NavLink to={tool.url} className="hover:bg-sidebar-accent/50" activeClassName="bg-primary/10 text-primary border border-primary/20">

@@ -15,6 +15,9 @@ import Workspace from "./pages/Workspace.tsx";
 import Auth from "./pages/Auth.tsx";
 import Pricing from "./pages/Pricing.tsx";
 import Onboarding from "./pages/Onboarding.tsx";
+import Redeem from "./pages/Redeem.tsx";
+import Gift from "./pages/Gift.tsx";
+import Admin from "./pages/Admin.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -40,6 +43,9 @@ const App = () => (
                     <Route path="/notebook" element={<Notebook />} />
                     <Route path="/workspace" element={<Workspace />} />
                     <Route path="/pricing" element={<Pricing />} />
+                    <Route path="/redeem" element={<Redeem />} />
+                    <Route path="/gift" element={<Gift />} />
+                    <Route path="/admin" element={<Admin />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </AppLayout>
