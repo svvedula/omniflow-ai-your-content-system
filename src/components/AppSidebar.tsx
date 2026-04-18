@@ -1,5 +1,5 @@
 import {
-  Code2, Sparkles, Briefcase, LayoutGrid, Zap, Lock, BookOpen, LogOut, LogIn,
+  Code2, Sparkles, Briefcase, LayoutGrid, Zap, Lock, BookOpen, LogOut, LogIn, Home,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/hooks/useAuth";
@@ -19,7 +19,8 @@ import {
 } from "@/components/ui/sidebar";
 
 const modes = [
-  { title: "Creator Mode", url: "/", icon: Sparkles, active: true },
+  { title: "Dashboard", url: "/", icon: Home, active: true },
+  { title: "Creator Mode", url: "/creator", icon: Sparkles, active: true },
   { title: "Developer Mode", url: "/developer", icon: Code2, active: true },
   { title: "Business Mode", url: "/business", icon: Briefcase, active: true },
   { title: "Workspace Mode", url: "/workspace", icon: LayoutGrid, active: true },

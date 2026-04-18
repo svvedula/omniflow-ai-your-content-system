@@ -7,6 +7,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { AppLayout } from "@/components/AppLayout";
 import { OnboardingGate } from "@/components/OnboardingGate";
 import Index from "./pages/Index.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
 import Developer from "./pages/Developer.tsx";
 import Business from "./pages/Business.tsx";
 import Notebook from "./pages/Notebook.tsx";
@@ -32,7 +33,8 @@ const App = () => (
               <Route path="/*" element={
                 <AppLayout>
                   <Routes>
-                    <Route path="/" element={<Index />} />
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/creator" element={<Index />} />
                     <Route path="/developer" element={<Developer />} />
                     <Route path="/business" element={<Business />} />
                     <Route path="/notebook" element={<Notebook />} />
