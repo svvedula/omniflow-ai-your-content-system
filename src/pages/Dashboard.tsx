@@ -19,6 +19,16 @@ const Dashboard = () => {
   const { balance } = useCredits();
   const firstName = (user?.user_metadata?.full_name || user?.email?.split("@")[0] || "there").split(" ")[0];
 
+  const hasOnboarded = () => !!user && localStorage.getItem(`ascend_onboarded_${user.id}`) === "1";
+
+  const goToMode = (url: string) => {
+    if (user && !hasOnboarded()) {
+      navigate(`/onboarding?next=${encodeURIComponent(url)}`);
+    } else {
+      navigate(url);
+    }
+  };
+
   return (
     <div className="min-h-full p-6 md:p-10 max-w-7xl mx-auto space-y-10">
       {/* Hero */}
@@ -48,10 +58,10 @@ const Dashboard = () => {
               className="h-14 px-8 text-base gap-2"
             >
               <Rocket className="h-5 w-5" />
-              Get Started
+              Onboarding → learn more
               <ArrowRight className="h-5 w-5" />
             </Button>
-            <Button size="lg" variant="ghost" onClick={() => navigate("/creator")} className="h-14 px-6 text-sm gap-2">
+            <Button size="lg" variant="ghost" onClick={() => goToMode("/creator")} className="h-14 px-6 text-sm gap-2">
               Skip tour, jump in
             </Button>
           </div>
@@ -88,7 +98,7 @@ const Dashboard = () => {
           {modes.map((m) => (
             <Card
               key={m.title}
-              onClick={() => navigate(m.url)}
+              onClick={() => goToMode(m.url)}
               className="p-5 cursor-pointer border-border/60 bg-card/50 hover:border-primary/40 hover:bg-card/80 transition-all group"
             >
               <div className="flex items-start gap-4">
