@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -71,6 +71,7 @@ const MODE_DETAILS: Record<string, { title: string; icon: any; route: string; fe
 export default function Onboarding() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState(0);
   const [goal, setGoal] = useState<Goal | null>(null);
   const [discordVisited, setDiscordVisited] = useState(false);
@@ -80,8 +81,9 @@ export default function Onboarding() {
 
   const finish = () => {
     if (user) localStorage.setItem(`ascend_onboarded_${user.id}`, "1");
-    const firstMode = selectedModes[0] ? MODE_DETAILS[selectedModes[0]].route : "/";
-    navigate(firstMode, { replace: true });
+    const nextParam = searchParams.get("next");
+    const dest = nextParam || (selectedModes[0] ? MODE_DETAILS[selectedModes[0]].route : "/");
+    navigate(dest, { replace: true });
   };
 
   const next = () => setStep((s) => Math.min(s + 1, totalSteps - 1));
