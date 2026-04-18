@@ -44,7 +44,7 @@ export function AppSidebar() {
           </div>
           {!collapsed && (
             <div>
-              <h1 className="text-sm font-bold tracking-tight text-foreground">OmniFlow AI</h1>
+              <h1 className="text-sm font-bold tracking-tight text-foreground">Ascend</h1>
               <p className="text-[10px] text-muted-foreground font-mono tracking-wider uppercase">AI Workspace</p>
             </div>
           )}
