@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Gift, Lock, Mail, Calendar, Clock } from "lucide-react";
+import { Gift as GiftIcon, Lock, Mail, Calendar, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -83,7 +83,7 @@ const Gift = () => {
     <div className="min-h-full p-6 md:p-10 max-w-3xl mx-auto space-y-8">
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
         <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-primary">
-          <Gift className="h-3.5 w-3.5" /> Gift Ascend Pro
+          <GiftIcon className="h-3.5 w-3.5" /> Gift Ascend Pro
         </div>
         <h1 className="text-3xl font-bold tracking-tight">Send Pro to someone you ❤</h1>
         <p className="text-muted-foreground">Pick a Pro plan, add a note, and we'll generate a one-time gift code for the recipient.</p>
@@ -140,7 +140,7 @@ const Gift = () => {
           </div>
 
           <Button type="submit" variant="glow" size="lg" className="w-full h-12 gap-2" disabled={submitting}>
-            <Gift className="h-4 w-4" />
+            <GiftIcon className="h-4 w-4" />
             {submitting ? "Reserving..." : `Reserve gift — $${PLANS.find((p) => p.days === selectedDays)?.priceUsd}`}
           </Button>
         </form>
