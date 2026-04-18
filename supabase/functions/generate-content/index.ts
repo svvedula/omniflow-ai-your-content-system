@@ -14,7 +14,7 @@ Be creative, specific, and platform-aware.
 
 TREND & RESEARCH RULES (CRITICAL):
 - You MUST incorporate CURRENT trending topics, recent news, and viral moments relevant to the niche.
-- Reference specific real-world events, controversies, breakthroughs, or cultural shifts from 2024-2026 that relate to the niche.
+- Reference specific real-world events, controversies, breakthroughs, or cultural shifts that are RELEVANT TO THE CURRENT DATE (provided in the user message). Never reference past years as if they are "current".
 - For documentary-style content: suggest fascinating historical events, unsolved mysteries, lesser-known stories, and pivotal moments that would make compelling videos.
 - Mix evergreen content ideas with timely, trend-driven ideas. At least 4 out of 10 ideas should reference specific real events or trends.
 - Include trending angles like "What [recent event] means for [niche]" or "The untold story of [historical moment]".
@@ -54,12 +54,24 @@ serve(async (req) => {
 
     const isYouTube = platform.toLowerCase().includes("youtube");
 
-    const userPrompt = `Generate a complete content system for:
+    const today = new Date();
+    const currentDate = today.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+    const currentYear = today.getFullYear();
+    const nextYear = currentYear + 1;
+
+    const userPrompt = `TODAY'S DATE: ${currentDate} (Year ${currentYear})
+
+Generate a complete content system for:
 - Niche: ${niche}
 - Target Audience: ${audience}
 - Platform: ${platform}
 
-IMPORTANT: Use your knowledge of current events, trending topics (2024-2026), viral moments, and fascinating historical stories to make these ideas timely and relevant. At least 4 ideas should reference specific real trends, news, or historical events.
+CRITICAL TIMELINESS REQUIREMENT:
+- The current year is ${currentYear}. DO NOT reference outdated years like 2024 or 2025 as if they are current — they are in the past.
+- Anchor trending ideas in ${currentYear} and forward-looking ${nextYear} predictions.
+- Reference recent events, news, and cultural moments from the last 6-12 months relative to ${currentDate}.
+- If your training data is older, focus on evergreen angles + extrapolated ${currentYear} predictions rather than naming stale events.
+- At least 4 ideas should reference real, current trends, ${currentYear} news, or historically relevant events that resonate today.
 
 Provide:
 1. 10 viral video ideas (creative, specific titles — mix trending/current event topics with evergreen ideas)
