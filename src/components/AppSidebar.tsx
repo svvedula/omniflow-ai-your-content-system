@@ -1,6 +1,7 @@
 import {
-  Code2, Sparkles, Briefcase, LayoutGrid, Zap, Lock, BookOpen, LogOut, LogIn, Home,
+  Code2, Sparkles, Briefcase, LayoutGrid, Zap, Lock, BookOpen, LogOut, LogIn, Home, Gift, Ticket, Shield,
 } from "lucide-react";
+import { useAdminRole } from "@/hooks/useAdminRole";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +29,8 @@ const modes = [
 
 const tools = [
   { title: "Notebook", url: "/notebook", icon: BookOpen },
+  { title: "Redeem Code", url: "/redeem", icon: Ticket },
+  { title: "Gift Pro", url: "/gift", icon: Gift },
 ];
 
 export function AppSidebar() {
