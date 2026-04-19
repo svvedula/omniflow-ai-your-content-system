@@ -66,7 +66,7 @@ const Dashboard = () => {
               Onboarding → learn more
               <ArrowRight className="h-5 w-5" />
             </Button>
-            <Button size="lg" variant="ghost" onClick={() => goToMode("/creator")} className="h-14 px-6 text-sm gap-2">
+            <Button size="lg" variant="ghost" onClick={skipTour} className="h-14 px-6 text-sm gap-2">
               Skip tour, jump in
             </Button>
           </div>
