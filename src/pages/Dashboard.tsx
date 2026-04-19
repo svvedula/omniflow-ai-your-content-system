@@ -29,6 +29,11 @@ const Dashboard = () => {
     }
   };
 
+  const skipTour = () => {
+    if (user) localStorage.setItem(`ascend_onboarded_${user.id}`, "1");
+    navigate("/creator");
+  };
+
   return (
     <div className="min-h-full p-6 md:p-10 max-w-7xl mx-auto space-y-10">
       {/* Hero */}
