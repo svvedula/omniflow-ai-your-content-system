@@ -29,6 +29,11 @@ const Dashboard = () => {
     }
   };
 
+  const skipTour = () => {
+    if (user) localStorage.setItem(`ascend_onboarded_${user.id}`, "1");
+    navigate("/creator");
+  };
+
   return (
     <div className="min-h-full p-6 md:p-10 max-w-7xl mx-auto space-y-10">
       {/* Hero */}
@@ -61,7 +66,7 @@ const Dashboard = () => {
               Onboarding → learn more
               <ArrowRight className="h-5 w-5" />
             </Button>
-            <Button size="lg" variant="ghost" onClick={() => goToMode("/creator")} className="h-14 px-6 text-sm gap-2">
+            <Button size="lg" variant="ghost" onClick={skipTour} className="h-14 px-6 text-sm gap-2">
               Skip tour, jump in
             </Button>
           </div>
