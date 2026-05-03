@@ -70,7 +70,7 @@ const Watchtower = () => {
         last_checked_at: new Date().toISOString(),
         last_change_summary: a?.changes_since_last?.join("; ") || null,
       }).eq("id", t.id);
-      await supabase.from("watchtower_snapshots" as any).insert?.({}); // placeholder, table created but optional
+      
       load();
       toast({ title: "Scan complete", description: a?.headline || "Done." });
     } catch (e) {

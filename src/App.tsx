@@ -19,6 +19,9 @@ import Redeem from "./pages/Redeem.tsx";
 import Gift from "./pages/Gift.tsx";
 import Admin from "./pages/Admin.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import FinancialModeler from "./pages/FinancialModeler.tsx";
+import Watchtower from "./pages/Watchtower.tsx";
+import PitchDeckCreator from "./pages/PitchDeckCreator.tsx";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +45,9 @@ const App = () => (
                     <Route path="/business" element={<Business />} />
                     <Route path="/notebook" element={<Notebook />} />
                     <Route path="/workspace" element={<Workspace />} />
+                    <Route path="/business/modeler" element={<FinancialModeler />} />
+                    <Route path="/business/watchtower" element={<Watchtower />} />
+                    <Route path="/business/pitch-deck" element={<PitchDeckCreator />} />
                     <Route path="/pricing" element={<Pricing />} />
                     <Route path="/redeem" element={<Redeem />} />
                     <Route path="/gift" element={<Gift />} />
