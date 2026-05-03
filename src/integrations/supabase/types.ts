@@ -14,6 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
+      action_tasks: {
+        Row: {
+          completed: boolean
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          priority: string
+          source: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          priority?: string
+          source?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          priority?: string
+          source?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      briefing_preferences: {
+        Row: {
+          created_at: string
+          enabled: boolean
+          id: string
+          last_sent_at: string | null
+          niche: string | null
+          send_hour_utc: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          last_sent_at?: string | null
+          niche?: string | null
+          send_hour_utc?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          last_sent_at?: string | null
+          niche?: string | null
+          send_hour_utc?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           content: string
@@ -147,6 +219,36 @@ export type Database = {
         }
         Relationships: []
       }
+      financial_models: {
+        Row: {
+          created_at: string
+          id: string
+          inputs: Json
+          results: Json
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          inputs?: Json
+          results?: Json
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          inputs?: Json
+          results?: Json
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       gift_purchases: {
         Row: {
           amount_cents: number | null
@@ -259,6 +361,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      pitch_decks: {
+        Row: {
+          created_at: string
+          id: string
+          inputs: Json
+          slides: Json
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          inputs?: Json
+          slides?: Json
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          inputs?: Json
+          slides?: Json
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -382,6 +514,42 @@ export type Database = {
           created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      watchtower_targets: {
+        Row: {
+          created_at: string
+          id: string
+          label: string | null
+          last_change_summary: string | null
+          last_checked_at: string | null
+          last_snapshot: string | null
+          updated_at: string
+          url: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label?: string | null
+          last_change_summary?: string | null
+          last_checked_at?: string | null
+          last_snapshot?: string | null
+          updated_at?: string
+          url: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string | null
+          last_change_summary?: string | null
+          last_checked_at?: string | null
+          last_snapshot?: string | null
+          updated_at?: string
+          url?: string
           user_id?: string
         }
         Relationships: []
