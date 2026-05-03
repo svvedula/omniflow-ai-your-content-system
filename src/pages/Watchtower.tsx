@@ -90,6 +90,15 @@ const Watchtower = () => {
           <span className="text-xs text-muted-foreground ml-2">{COST} credit / scan</span>
         </div>
 
+        <div className="rounded-xl border border-border/30 bg-secondary/20 p-4">
+          <p className="text-sm text-foreground font-medium mb-1">What this does</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Track your competitors' pricing, feature, and landing pages. Each scan snapshots the page, then on every re-scan we
+            diff it against the last snapshot and use AI to summarize what changed, rate the threat level, and recommend a
+            counter-move — so you never get blindsided by a launch or pricing shift.
+          </p>
+        </div>
+
         <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-4 space-y-3">
           <p className="text-xs text-muted-foreground">Add competitor pages (pricing, features, blog). Scan anytime to detect changes vs. last snapshot.</p>
           <div className="flex flex-col sm:flex-row gap-2">

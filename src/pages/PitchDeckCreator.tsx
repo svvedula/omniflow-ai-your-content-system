@@ -78,6 +78,15 @@ const PitchDeckCreator = () => {
           <span className="text-xs text-muted-foreground ml-2">{COST} credits / deck</span>
         </div>
 
+        <div className="rounded-xl border border-border/30 bg-secondary/20 p-4">
+          <p className="text-sm text-foreground font-medium mb-1">What this does</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Drop in the basics about your company — problem, solution, market, traction, ask — and the AI builds a structured
+            10-slide investor deck with headlines, bullets, and speaker notes for each slide. Save it to your workspace or
+            export the whole thing as Markdown to drop into Google Slides, Notion, or Keynote.
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-4 rounded-xl border border-violet-500/20 bg-violet-500/5">
           {[
             ["company", "Company *"], ["oneLiner", "One-liner"], ["problem", "Problem"],
