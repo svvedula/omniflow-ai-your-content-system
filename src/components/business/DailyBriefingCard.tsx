@@ -66,24 +66,6 @@ export const DailyBriefingCard = () => {
         We'll scan the market each morning and email you a 60-second briefing: trends, deals, and one action item — tailored to your niche.
       </p>
 
-      <div className="mb-3 rounded-lg border border-sky-500/20 bg-sky-500/5 p-3 space-y-2">
-        <p className="text-[11px] text-muted-foreground">
-          📬 Emails require a verified sender domain. Your preferences will start sending automatically once it's live.
-        </p>
-        <a
-          href="#email-setup"
-          onClick={(e) => {
-            e.preventDefault();
-            toast({
-              title: "Ready when you are",
-              description: "Ask the AI to 'set up email domain' in chat to launch the guided setup.",
-            });
-          }}
-          className="inline-flex items-center gap-1.5 rounded-md bg-sky-500 hover:bg-sky-400 text-white px-3 py-1.5 text-xs font-medium transition-colors"
-        >
-          <Mail className="h-3 w-3" /> Set up email domain
-        </a>
-      </div>
 
       {enabled && (
         <div className="space-y-2 pt-2 border-t border-border/30">
