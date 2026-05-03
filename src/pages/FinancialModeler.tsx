@@ -12,6 +12,7 @@ import { toast } from "@/hooks/use-toast";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from "recharts";
+import BankStatementAnalyzer from "@/components/business/BankStatementAnalyzer";
 
 const COST = 2;
 
@@ -76,6 +77,16 @@ const FinancialModeler = () => {
             tailored to your business model. Save any model to revisit later.
           </p>
         </div>
+
+        <BankStatementAnalyzer
+          onApplyToModel={(s) => setForm((p) => ({
+            ...p,
+            monthlyRevenue: s.monthlyRevenue || p.monthlyRevenue,
+            monthlyCosts: s.monthlyCosts || p.monthlyCosts,
+            growthRate: s.growthRate || p.growthRate,
+            runwayMonths: s.runwayMonths || p.runwayMonths,
+          }))}
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 rounded-xl border border-amber-500/20 bg-amber-500/5">
           <div><Label className="text-xs">Business name</Label><Input value={form.businessName} onChange={(e) => set("businessName", e.target.value)} className="bg-secondary/30" /></div>
