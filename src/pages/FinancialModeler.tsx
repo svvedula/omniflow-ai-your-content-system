@@ -78,6 +78,16 @@ const FinancialModeler = () => {
           </p>
         </div>
 
+        <BankStatementAnalyzer
+          onApplyToModel={(s) => setForm((p) => ({
+            ...p,
+            monthlyRevenue: s.monthlyRevenue || p.monthlyRevenue,
+            monthlyCosts: s.monthlyCosts || p.monthlyCosts,
+            growthRate: s.growthRate || p.growthRate,
+            runwayMonths: s.runwayMonths || p.runwayMonths,
+          }))}
+        />
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 rounded-xl border border-amber-500/20 bg-amber-500/5">
           <div><Label className="text-xs">Business name</Label><Input value={form.businessName} onChange={(e) => set("businessName", e.target.value)} className="bg-secondary/30" /></div>
           <div><Label className="text-xs">Model type</Label><Input value={form.model} onChange={(e) => set("model", e.target.value)} placeholder="SaaS, e-commerce, services..." className="bg-secondary/30" /></div>
