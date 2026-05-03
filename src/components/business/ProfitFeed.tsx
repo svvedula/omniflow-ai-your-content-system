@@ -15,16 +15,18 @@ const ProfitFeed = ({ autoScan = false }: { autoScan?: boolean }) => {
   const [niche, setNiche] = useState("");
   const [hasScanned, setHasScanned] = useState(false);
   const didAutoScan = useRef(false);
-  const { spend, hasEnough } = useCredits();
+  const { spend, hasEnough, loading: creditsLoading, balance } = useCredits();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (autoScan && !didAutoScan.current) {
+    if (autoScan && !didAutoScan.current && !creditsLoading && balance !== null) {
       didAutoScan.current = true;
-      scanMarket(true);
+      // small delay to ensure balance is fully settled
+      const t = setTimeout(() => scanMarket(true), 500);
+      return () => clearTimeout(t);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoScan]);
+  }, [autoScan, creditsLoading, balance]);
 
   const scanMarket = async (isAuto = false) => {
     if (!hasEnough(SCAN_COST)) {
