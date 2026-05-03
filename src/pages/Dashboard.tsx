@@ -19,20 +19,8 @@ const Dashboard = () => {
   const { balance } = useCredits();
   const firstName = (user?.user_metadata?.full_name || user?.email?.split("@")[0] || "there").split(" ")[0];
 
-  const hasOnboarded = () => !!user && localStorage.getItem(`ascend_onboarded_${user.id}`) === "1";
-
-  const goToMode = (url: string) => {
-    if (user && !hasOnboarded()) {
-      navigate(`/onboarding?next=${encodeURIComponent(url)}`);
-    } else {
-      navigate(url);
-    }
-  };
-
-  const skipTour = () => {
-    if (user) localStorage.setItem(`ascend_onboarded_${user.id}`, "1");
-    navigate("/creator");
-  };
+  const goToMode = (url: string) => navigate(url);
+  const skipTour = () => navigate("/creator");
 
   return (
     <div className="min-h-full p-6 md:p-10 max-w-7xl mx-auto space-y-10">
