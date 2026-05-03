@@ -5,6 +5,9 @@ import {
   BarChart3, Megaphone, ClipboardList, Lightbulb, X, Signal,
 } from "lucide-react";
 import ProfitFeed from "@/components/business/ProfitFeed";
+import { ActionOS } from "@/components/business/ActionOS";
+import { DailyBriefingCard } from "@/components/business/DailyBriefingCard";
+import { WidgetGrid } from "@/components/business/WidgetGrid";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
