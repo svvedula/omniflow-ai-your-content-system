@@ -53,21 +53,24 @@ export const DailyBriefingCard = () => {
             <Mail className="h-4 w-4 text-emerald-400" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-foreground">Daily Briefing Email</h3>
+            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+              Daily Briefing Email
+              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-secondary/50 text-muted-foreground uppercase tracking-wider">WIP</span>
+            </h3>
             <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
               Curated opportunities · delivered daily
             </p>
           </div>
         </div>
-        <Switch checked={enabled} onCheckedChange={onToggle} disabled={!loaded} />
+        <Switch checked={false} disabled />
       </div>
 
       <p className="text-xs text-muted-foreground mb-3">
-        We'll scan the market each morning and email you a 60-second briefing: trends, deals, and one action item — tailored to your niche.
+        We'll scan the market each morning and email you a 60-second briefing: trends, deals, and one action item — tailored to your niche. <span className="text-amber-400">Activates once the email domain is connected.</span>
       </p>
 
 
-      {enabled && (
+      {false && enabled && (
         <div className="space-y-2 pt-2 border-t border-border/30">
           <div>
             <label className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Niche</label>

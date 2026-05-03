@@ -68,6 +68,15 @@ const FinancialModeler = () => {
           <span className="text-xs text-muted-foreground ml-2">{COST} credits / run</span>
         </div>
 
+        <div className="rounded-xl border border-border/30 bg-secondary/20 p-4">
+          <p className="text-sm text-foreground font-medium mb-1">What this does</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Plug in your real numbers — revenue, costs, growth, CAC, LTV, runway — and the modeler runs a 12-month projection,
+            calculates LTV/CAC ratio, payback period, and break-even month, then surfaces the top risks and concrete recommendations
+            tailored to your business model. Save any model to revisit later.
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 rounded-xl border border-amber-500/20 bg-amber-500/5">
           <div><Label className="text-xs">Business name</Label><Input value={form.businessName} onChange={(e) => set("businessName", e.target.value)} className="bg-secondary/30" /></div>
           <div><Label className="text-xs">Model type</Label><Input value={form.model} onChange={(e) => set("model", e.target.value)} placeholder="SaaS, e-commerce, services..." className="bg-secondary/30" /></div>
