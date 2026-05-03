@@ -11,6 +11,9 @@ import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits } from "@/hooks/useCredits";
 import { useNavigate } from "react-router-dom";
+import { ActionOS } from "@/components/business/ActionOS";
+import { DailyBriefingCard } from "@/components/business/DailyBriefingCard";
+import { WidgetGrid } from "@/components/business/WidgetGrid";
 
 type Tool = "table" | "actions" | "summarize" | "insights";
 
@@ -178,6 +181,10 @@ const Workspace = () => {
             <h1 className="text-3xl font-bold text-foreground">AI-Powered Workspace Tools</h1>
             <p className="text-muted-foreground max-w-md mx-auto">Paste anything → get structured, actionable results instantly</p>
           </div>
+
+          <ActionOS />
+          <WidgetGrid />
+          <DailyBriefingCard />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {TOOLS.map((tool) => (
