@@ -55,7 +55,7 @@ const WIDGETS: Widget[] = [
     path: null,
     wip: true,
   },
-] as const;
+];
 
 export const WidgetGrid = () => {
   const navigate = useNavigate();
