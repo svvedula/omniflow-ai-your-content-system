@@ -12,6 +12,7 @@ import { toast } from "@/hooks/use-toast";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from "recharts";
+import BankStatementAnalyzer from "@/components/business/BankStatementAnalyzer";
 
 const COST = 2;
 
