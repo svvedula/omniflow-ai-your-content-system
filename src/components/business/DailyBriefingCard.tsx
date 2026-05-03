@@ -66,6 +66,15 @@ export const DailyBriefingCard = () => {
         We'll scan the market each morning and email you a 60-second briefing: trends, deals, and one action item — tailored to your niche.
       </p>
 
+      <div className="mb-3 rounded-lg border border-sky-500/20 bg-sky-500/5 p-3 space-y-2">
+        <p className="text-[11px] text-muted-foreground">
+          📬 Emails require a verified sender domain. Set yours up whenever you're ready — your preferences here will start sending automatically once it's live.
+        </p>
+        <presentation-actions>
+          <presentation-open-email-setup>Set up email domain</presentation-open-email-setup>
+        </presentation-actions>
+      </div>
+
       {enabled && (
         <div className="space-y-2 pt-2 border-t border-border/30">
           <div>
