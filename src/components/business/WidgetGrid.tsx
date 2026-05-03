@@ -1,7 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import { Calculator, Eye, Presentation, Search, Construction } from "lucide-react";
 
-const WIDGETS = [
+type Widget = {
+  id: string;
+  title: string;
+  description: string;
+  icon: typeof Calculator;
+  color: string;
+  bg: string;
+  border: string;
+  path: string | null;
+  wip?: boolean;
+};
+
+const WIDGETS: Widget[] = [
   {
     id: "modeler",
     title: "Financial Modeler",
