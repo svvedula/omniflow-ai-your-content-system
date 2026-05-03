@@ -53,6 +53,33 @@ export type Database = {
         }
         Relationships: []
       }
+      bank_statements: {
+        Row: {
+          analysis: Json | null
+          created_at: string
+          filename: string
+          id: string
+          processing_status: string
+          user_id: string
+        }
+        Insert: {
+          analysis?: Json | null
+          created_at?: string
+          filename: string
+          id?: string
+          processing_status?: string
+          user_id: string
+        }
+        Update: {
+          analysis?: Json | null
+          created_at?: string
+          filename?: string
+          id?: string
+          processing_status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       briefing_preferences: {
         Row: {
           created_at: string
