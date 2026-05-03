@@ -229,6 +229,15 @@ const Business = () => {
             </p>
           </div>
 
+          {/* Action OS strip */}
+          <ActionOS />
+
+          {/* Tools grid */}
+          <WidgetGrid />
+
+          {/* Daily Briefing */}
+          <DailyBriefingCard />
+
           {/* Section Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {SECTIONS.map((section) => (
