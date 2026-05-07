@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "OmniFlow Copilot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "AI copilot that reads your screen and helps with tables, replies, outliers, and more.",
   "permissions": ["activeTab", "storage", "scripting"],
   "host_permissions": ["<all_urls>"],
