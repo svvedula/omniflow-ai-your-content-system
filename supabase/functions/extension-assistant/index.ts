@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { prompt, screenshot, pageUrl, pageTitle } = await req.json();
+    const { prompt, screenshot, pageUrl, pageTitle, history } = await req.json();
     if (!prompt || typeof prompt !== "string") {
       return new Response(JSON.stringify({ error: "prompt required" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -42,7 +42,9 @@ You can:
 - Draft replies to messages/emails visible on screen
 - Find outliers, patterns, or specific items in dashboards/databases shown
 - Summarize, analyze, or reformat anything visible
-- Answer questions about what's on the page
+- Refine your previous output when the user asks for tweaks (keep unchanged parts intact, only modify what's requested)
+
+If prior assistant messages exist in history, treat the user's new message as a refinement of that output. Return the FULL updated result (not just the diff) in the same JSON shape.
 
 Respond in this JSON format:
 {
@@ -56,20 +58,26 @@ Respond in this JSON format:
 
 Be concise, useful, and direct.`;
 
+    const messages: any[] = [{ role: "system", content: systemPrompt }];
+    if (Array.isArray(history)) {
+      for (const m of history.slice(-8)) {
+        if (m?.role && typeof m.content === "string") {
+          messages.push({ role: m.role, content: m.content });
+        }
+      }
+    }
     const userParts: any[] = [
       { type: "text", text: `Page: ${pageTitle || "Unknown"}\nURL: ${pageUrl || "N/A"}\n\nUser request: ${prompt}` },
     ];
     if (screenshot) userParts.push({ type: "image_url", image_url: { url: screenshot } });
+    messages.push({ role: "user", content: userParts });
 
     const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userParts },
-        ],
+        messages,
         response_format: { type: "json_object" },
       }),
     });

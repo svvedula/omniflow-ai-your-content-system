@@ -12,6 +12,15 @@ const promptEl = document.getElementById("prompt");
 const runBtn = document.getElementById("run");
 const useScreenshot = document.getElementById("useScreenshot");
 const output = document.getElementById("output");
+const refineBox = document.getElementById("refineBox");
+const refineEl = document.getElementById("refine");
+const refineBtn = document.getElementById("refineBtn");
+const refineScreenshot = document.getElementById("refineScreenshot");
+const newBtn = document.getElementById("newBtn");
+
+// Conversation memory: list of {role, content} where content can be string or array of parts
+let history = [];
+let lastResult = null;
 
 function escapeHtml(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -39,12 +48,25 @@ document.querySelectorAll(".quick button").forEach((btn) => {
 });
 
 promptEl.addEventListener("keydown", (e) => {
-  if ((e.metaKey || e.ctrlKey) && e.key === "Enter") run();
+  if ((e.metaKey || e.ctrlKey) && e.key === "Enter") run(false);
 });
-runBtn.addEventListener("click", run);
+refineEl?.addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key === "Enter") run(true);
+});
+runBtn.addEventListener("click", () => run(false));
+refineBtn.addEventListener("click", () => run(true));
+newBtn.addEventListener("click", () => {
+  history = [];
+  lastResult = null;
+  output.innerHTML = "";
+  refineBox.style.display = "none";
+  promptEl.value = "";
+  refineEl.value = "";
+  promptEl.focus();
+});
 
-async function run() {
-  const prompt = promptEl.value.trim();
+async function run(isRefine) {
+  const prompt = isRefine ? refineEl.value.trim() : promptEl.value.trim();
   if (!prompt) return;
   const { extKey } = await chrome.storage.local.get(["extKey"]);
   if (!extKey || typeof extKey !== "string" || !extKey.startsWith("omf_")) {
@@ -52,13 +74,15 @@ async function run() {
     return;
   }
 
-  runBtn.disabled = true;
-  output.innerHTML = '<div class="loading"><div class="spinner"></div> Analyzing...</div>';
+  const btn = isRefine ? refineBtn : runBtn;
+  btn.disabled = true;
+  output.innerHTML = '<div class="loading"><div class="spinner"></div> ' + (isRefine ? "Refining..." : "Analyzing...") + '</div>';
 
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     let screenshot = null;
-    if (useScreenshot.checked && tab) {
+    const wantShot = isRefine ? refineScreenshot.checked : useScreenshot.checked;
+    if (wantShot && tab) {
       try { screenshot = await chrome.tabs.captureVisibleTab(tab.windowId, { format: "jpeg", quality: 70 }); }
       catch (e) { console.warn("Screenshot failed:", e); }
     }
@@ -71,7 +95,13 @@ async function run() {
         apikey: ANON_KEY,
         "x-extension-key": extKey,
       },
-      body: JSON.stringify({ prompt, screenshot, pageUrl: tab?.url, pageTitle: tab?.title }),
+      body: JSON.stringify({
+        prompt,
+        screenshot,
+        pageUrl: tab?.url,
+        pageTitle: tab?.title,
+        history: history.slice(-8),
+      }),
     });
 
     const data = await res.json();
@@ -88,11 +118,20 @@ async function run() {
       }
       throw new Error(data.error || `Error ${res.status}`);
     }
+
+    // Push to history
+    history.push({ role: "user", content: prompt });
+    history.push({ role: "assistant", content: JSON.stringify(data) });
+    lastResult = data;
+
     render(data);
+    refineBox.style.display = "block";
+    refineEl.value = "";
+    refineEl.focus();
   } catch (err) {
     output.innerHTML = `<div class="error">${escapeHtml(err.message)}</div>`;
   } finally {
-    runBtn.disabled = false;
+    btn.disabled = false;
   }
 }
 
