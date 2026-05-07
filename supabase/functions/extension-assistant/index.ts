@@ -1,11 +1,32 @@
 import { corsHeaders } from "https://esm.sh/@supabase/supabase-js@2.95.0/cors";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.95.0";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+    const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    if (!LOVABLE_API_KEY || !SUPABASE_URL || !SERVICE_KEY) {
+      throw new Error("Server not configured");
+    }
+
+    const apiKey = req.headers.get("x-extension-key");
+    if (!apiKey) {
+      return new Response(JSON.stringify({ error: "Missing x-extension-key header" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const admin = createClient(SUPABASE_URL, SERVICE_KEY);
+    const { data: access, error: accessErr } = await admin.rpc("check_extension_access", { p_api_key: apiKey });
+    if (accessErr) throw accessErr;
+    if (!access?.valid) {
+      return new Response(JSON.stringify({ error: access?.error || "Access denied", code: "ACCESS_REQUIRED" }), {
+        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const { prompt, screenshot, pageUrl, pageTitle } = await req.json();
     if (!prompt || typeof prompt !== "string") {
@@ -33,21 +54,16 @@ Respond in this JSON format:
   "actions": ["copy","insert"] | []
 }
 
-Be concise, useful, and direct. If a table fits, return one. If it's a reply draft, put it in content.`;
+Be concise, useful, and direct.`;
 
     const userParts: any[] = [
       { type: "text", text: `Page: ${pageTitle || "Unknown"}\nURL: ${pageUrl || "N/A"}\n\nUser request: ${prompt}` },
     ];
-    if (screenshot) {
-      userParts.push({ type: "image_url", image_url: { url: screenshot } });
-    }
+    if (screenshot) userParts.push({ type: "image_url", image_url: { url: screenshot } });
 
     const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
+      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
@@ -61,27 +77,22 @@ Be concise, useful, and direct. If a table fits, return one. If it's a reply dra
     if (!aiRes.ok) {
       const errText = await aiRes.text();
       if (aiRes.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limit hit. Try again in a moment." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        return new Response(JSON.stringify({ error: "Rate limit. Try again." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       if (aiRes.status === 402) {
-        return new Response(JSON.stringify({ error: "AI credits exhausted." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        return new Response(JSON.stringify({ error: "AI credits exhausted." }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
-      throw new Error(`AI gateway error [${aiRes.status}]: ${errText}`);
+      throw new Error(`AI [${aiRes.status}]: ${errText}`);
     }
 
     const data = await aiRes.json();
     const raw = data.choices?.[0]?.message?.content || "{}";
     const cleaned = raw.replace(/```json\n?|```/g, "").replace(/[\u0000-\u001F]/g, " ").trim();
-
     let result;
     try { result = JSON.parse(cleaned); }
     catch { result = { type: "text", title: "Response", content: raw, table: null, items: null, actions: [] }; }
 
-    return new Response(JSON.stringify(result), {
+    return new Response(JSON.stringify({ ...result, _source: access.source }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err: any) {
