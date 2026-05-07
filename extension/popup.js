@@ -47,7 +47,10 @@ async function run() {
   const prompt = promptEl.value.trim();
   if (!prompt) return;
   const { extKey } = await chrome.storage.local.get(["extKey"]);
-  if (!extKey) return showSetup();
+  if (!extKey || typeof extKey !== "string" || !extKey.startsWith("omf_")) {
+    showSetup();
+    return;
+  }
 
   runBtn.disabled = true;
   output.innerHTML = '<div class="loading"><div class="spinner"></div> Analyzing...</div>';
