@@ -113,9 +113,15 @@ export default function Extension() {
           <p className="text-muted-foreground max-w-md mx-auto">
             Pop it open on any tab. Tell it what you need. It reads your screen and answers — tables, replies, outliers, summaries.
           </p>
-          <Button onClick={handleDownload} size="lg" className="gap-2 mt-4">
-            <Download className="h-4 w-4" /> Download Extension (.zip)
-          </Button>
+          {hasAccess ? (
+            <Button onClick={handleDownload} size="lg" className="gap-2 mt-4">
+              <Download className="h-4 w-4" /> Download Extension (.zip)
+            </Button>
+          ) : (
+            <Button disabled size="lg" className="gap-2 mt-4">
+              <Lock className="h-4 w-4" /> Unlock below to download
+            </Button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
