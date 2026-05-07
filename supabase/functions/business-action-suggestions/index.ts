@@ -13,15 +13,20 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY missing");
 
-    const prompt = `You are a chief-of-staff for a solo entrepreneur. Suggest 5 concrete, high-leverage action items for today.
+    const prompt = `You are a chief-of-staff with deep market knowledge. Suggest 5 high-leverage action items tailored to the user's specific niche, referencing what's working in that market right now (based on patterns you know from training).
 
 User niche/business: ${niche || "general"}
 Recent context: ${context || "n/a"}
 
+REQUIREMENTS:
+- Each task must reference a niche-specific lever (channel, tactic, partner type, content angle that actually works in this vertical).
+- "why" must mention the market reality: a competitor pattern, a buyer behavior, a channel that's currently underpriced, etc.
+- No generic "post on social media" fluff. Be specific: which platform, which format, which angle, why now.
+
 Return ONLY JSON:
 {
   "tasks": [
-    {"title": "short verb-led task (max 8 words)", "priority": "high|medium|low", "why": "1 sentence"}
+    {"title": "short verb-led task (max 8 words)", "priority": "high|medium|low", "why": "1-2 sentences with market-specific reasoning"}
   ]
 }`;
 

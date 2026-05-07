@@ -13,7 +13,7 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY missing");
 
-    const prompt = `You are a YC-grade pitch coach. Generate a 10-slide investor pitch deck.
+    const prompt = `You are a YC-grade pitch coach AND a market analyst. Generate a 10-slide investor pitch deck enriched with niche-specific market intelligence from your training knowledge.
 
 Company: ${company}
 One-liner: ${oneLiner || "n/a"}
@@ -25,6 +25,13 @@ Traction: ${traction || "n/a"}
 Team: ${team || "n/a"}
 Ask: ${ask || "n/a"}
 
+REQUIREMENTS:
+- Identify the specific sub-vertical and infuse the deck with KNOWN market data: typical TAM/SAM/SOM ranges for this category, common growth rates, well-known competitors by name, recent funding patterns in the space.
+- Market slide MUST cite plausible TAM/SAM/SOM numbers with reasoning, not vague claims.
+- Competition slide MUST name 3-5 actual competitors that exist (or competitor archetypes) and explain the differentiation gap.
+- Traction slide should benchmark the user's traction against what's typical for this stage in this niche.
+- Speaker notes should sound like an analyst, not generic advice.
+
 Return ONLY JSON (no markdown):
 {
   "title": "Deck title",
@@ -32,7 +39,7 @@ Return ONLY JSON (no markdown):
     {"number": 1, "title": "Slide title", "headline": "Big bold statement", "bullets": ["point", "point"], "speaker_notes": "what to say"}
   ]
 }
-Generate exactly these 10 slides: Cover, Problem, Solution, Market, Product, Business Model, Traction, Competition, Team, Ask.`;
+Generate exactly these 10 slides: Cover, Problem, Solution, Market (with TAM/SAM/SOM), Product, Business Model, Traction (with benchmark comparison), Competition (named competitors), Team, Ask.`;
 
     const r = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

@@ -120,6 +120,31 @@ const FinancialModeler = () => {
               <Stat label="Months projected" value={result.projection?.length ?? 0} />
             </div>
 
+            {result.market_context && (
+              <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-4 space-y-2">
+                <h3 className="text-sm font-semibold flex items-center gap-2">
+                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 uppercase tracking-wider">Market Intel</span>
+                  {result.market_context.niche}
+                </h3>
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 text-xs">
+                  <div className="rounded bg-secondary/30 p-2">
+                    <p className="text-[10px] uppercase text-muted-foreground">Niche growth</p>
+                    <p className="font-bold">{result.market_context.benchmark_growth_pct}%/mo</p>
+                  </div>
+                  <div className="rounded bg-secondary/30 p-2">
+                    <p className="text-[10px] uppercase text-muted-foreground">Niche CAC</p>
+                    <p className="font-bold">${result.market_context.benchmark_cac}</p>
+                  </div>
+                  <div className="rounded bg-secondary/30 p-2">
+                    <p className="text-[10px] uppercase text-muted-foreground">Niche LTV/CAC</p>
+                    <p className="font-bold">{result.market_context.benchmark_ltv_cac}</p>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground"><span className="font-semibold text-foreground">You vs benchmark:</span> {result.market_context.user_vs_benchmark}</p>
+                <p className="text-xs text-muted-foreground"><span className="font-semibold text-foreground">Competitive landscape:</span> {result.market_context.competitor_landscape}</p>
+              </div>
+            )}
+
             {result.projection?.length > 0 && (
               <div className="rounded-xl border border-border/30 bg-secondary/20 p-4">
                 <h3 className="text-sm font-semibold mb-3">12-Month Projection</h3>
