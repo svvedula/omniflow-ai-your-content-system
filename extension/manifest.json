@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "OmniFlow Copilot",
+  "version": "1.0.0",
+  "description": "AI copilot that reads your screen and helps with tables, replies, outliers, and more.",
+  "permissions": ["activeTab", "storage", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "OmniFlow Copilot",
+    "default_icon": "icon.png"
+  },
+  "icons": { "48": "icon.png", "128": "icon.png" },
+  "background": { "service_worker": "background.js" }
+}

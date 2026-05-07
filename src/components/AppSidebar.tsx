@@ -1,5 +1,5 @@
 import {
-  Code2, Sparkles, Briefcase, LayoutGrid, Zap, Lock, BookOpen, LogOut, LogIn, Home, Gift, Ticket, Shield,
+  Code2, Sparkles, Briefcase, LayoutGrid, Zap, Lock, BookOpen, LogOut, LogIn, Home, Gift, Ticket, Shield, Chrome,
 } from "lucide-react";
 import { useAdminRole } from "@/hooks/useAdminRole";
 import { NavLink } from "@/components/NavLink";
@@ -29,6 +29,7 @@ const modes = [
 
 const tools = [
   { title: "Notebook", url: "/notebook", icon: BookOpen },
+  { title: "Browser Extension", url: "/extension", icon: Chrome },
   { title: "Redeem Code", url: "/redeem", icon: Ticket },
   { title: "Gift Pro", url: "/gift", icon: Gift },
 ];

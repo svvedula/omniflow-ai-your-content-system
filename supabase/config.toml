@@ -1,1 +1,4 @@
 project_id = "csseimpjrurrvhaogzuo"
+
+[functions.extension-assistant]
+verify_jwt = false

@@ -22,6 +22,7 @@ import NotFound from "./pages/NotFound.tsx";
 import FinancialModeler from "./pages/FinancialModeler.tsx";
 import Watchtower from "./pages/Watchtower.tsx";
 import PitchDeckCreator from "./pages/PitchDeckCreator.tsx";
+import Extension from "./pages/Extension.tsx";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => (
                     <Route path="/business/modeler" element={<FinancialModeler />} />
                     <Route path="/business/watchtower" element={<Watchtower />} />
                     <Route path="/business/pitch-deck" element={<PitchDeckCreator />} />
+                    <Route path="/extension" element={<Extension />} />
                     <Route path="/pricing" element={<Pricing />} />
                     <Route path="/redeem" element={<Redeem />} />
                     <Route path="/gift" element={<Gift />} />
