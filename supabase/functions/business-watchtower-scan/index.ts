@@ -34,7 +34,7 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY missing");
 
-    const prompt = `You are a competitive intelligence analyst. Analyze this competitor page and (if provided) compare against the previous snapshot.
+    const prompt = `You are a competitive intelligence analyst. Analyze this competitor page, compare against the previous snapshot if provided, AND apply your background knowledge of this competitor (if you recognize them) and their market.
 
 URL: ${url}
 CURRENT TEXT:
@@ -43,13 +43,20 @@ ${text}
 PREVIOUS SNAPSHOT:
 ${lastSnapshot ? lastSnapshot.slice(0, 4000) : "NONE — this is the first scan."}
 
+REQUIREMENTS:
+- If you recognize this company from training, add what you know (typical positioning, known funding, usual playbook) into market_context.
+- Key signals should call out specific pricing tiers, feature names, or messaging shifts — not vague observations.
+- Threat level must be justified by specific evidence in the text.
+
 Return ONLY JSON:
 {
   "headline": "1-line summary of what this page is",
+  "market_context": "1-2 sentences on who this company is and how they typically operate (only if recognized — else 'unknown competitor')",
   "key_signals": [{"type": "pricing|feature|positioning|messaging|other", "detail": "string"}],
   "changes_since_last": ["string"],
   "threat_level": "low|medium|high",
-  "recommended_action": "string"
+  "threat_reasoning": "1 sentence on why that level",
+  "recommended_action": "specific tactical move the user should make"
 }`;
 
     const r = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
