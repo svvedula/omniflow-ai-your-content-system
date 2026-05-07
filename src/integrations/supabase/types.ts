@@ -246,6 +246,60 @@ export type Database = {
         }
         Relationships: []
       }
+      extension_access: {
+        Row: {
+          created_at: string
+          credits_spent: number
+          id: string
+          source: string
+          unlocked_for: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          credits_spent?: number
+          id?: string
+          source?: string
+          unlocked_for: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          credits_spent?: number
+          id?: string
+          source?: string
+          unlocked_for?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      extension_keys: {
+        Row: {
+          api_key: string
+          created_at: string
+          id: string
+          label: string | null
+          last_used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          api_key: string
+          created_at?: string
+          id?: string
+          label?: string | null
+          last_used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          api_key?: string
+          created_at?: string
+          id?: string
+          label?: string | null
+          last_used_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       financial_models: {
         Row: {
           created_at: string
@@ -586,6 +640,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_extension_access: { Args: { p_api_key: string }; Returns: Json }
       grant_daily_credits: { Args: { p_user_id: string }; Returns: number }
       has_role: {
         Args: {
@@ -604,6 +659,7 @@ export type Database = {
         }
         Returns: number
       }
+      unlock_extension_day: { Args: never; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user"
