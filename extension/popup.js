@@ -47,7 +47,10 @@ async function run() {
   const prompt = promptEl.value.trim();
   if (!prompt) return;
   const { extKey } = await chrome.storage.local.get(["extKey"]);
-  if (!extKey) return showSetup();
+  if (!extKey || typeof extKey !== "string" || !extKey.startsWith("omf_")) {
+    showSetup();
+    return;
+  }
 
   runBtn.disabled = true;
   output.innerHTML = '<div class="loading"><div class="spinner"></div> Analyzing...</div>';
@@ -73,6 +76,12 @@ async function run() {
 
     const data = await res.json();
     if (!res.ok) {
+      if (res.status === 401 || /x-extension-key/i.test(data.error || "")) {
+        await chrome.storage.local.remove(["extKey"]);
+        output.innerHTML = `<div class="error">🔑 Your access key is missing or invalid. <a href="#" id="reKey">Re-enter key</a></div>`;
+        document.getElementById("reKey")?.addEventListener("click", (e) => { e.preventDefault(); showSetup(); });
+        return;
+      }
       if (data.code === "ACCESS_REQUIRED") {
         output.innerHTML = `<div class="error">🔒 Daily access not unlocked. <a href="${KEY_PAGE}" target="_blank">Unlock today (10 credits or Pro)</a></div>`;
         return;
