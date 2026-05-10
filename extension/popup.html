@@ -5,30 +5,37 @@
 <style>
   :root { color-scheme: dark; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { width: 400px; max-height: 600px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-    background: #0a0e14; color: #e6edf3; padding: 14px; }
+  html, body { height: 100%; }
+  body { width: 400px; min-height: 380px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: #0a0e14; color: #e6edf3; padding: 14px; display: flex; flex-direction: column; }
+  body.maximized { width: 100%; max-height: none; }
   .header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #1f2937; }
   .logo { width: 24px; height: 24px; border-radius: 6px; background: linear-gradient(135deg, #06b6d4, #3b82f6); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
   .title { font-size: 14px; font-weight: 600; }
-  .subtitle { font-size: 10px; color: #6b7280; margin-left: auto; font-family: ui-monospace, monospace; }
+  .subtitle { font-size: 10px; color: #6b7280; font-family: ui-monospace, monospace; margin-left: auto; }
+  .iconbtn { background: #1f2937; color: #9ca3af; border: none; width: 26px; height: 26px; border-radius: 6px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; padding: 0; }
+  .iconbtn:hover { background: #374151; color: #e6edf3; }
+  .header-actions { display: flex; gap: 4px; }
   textarea, input { width: 100%; background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 10px; color: #e6edf3; font-size: 13px; font-family: inherit; outline: none; }
   textarea { min-height: 70px; resize: vertical; }
   textarea:focus, input:focus { border-color: #06b6d4; }
   .row { display: flex; gap: 6px; margin-top: 8px; align-items: center; }
   label.chk { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #9ca3af; cursor: pointer; flex: 1; }
-  button { background: linear-gradient(135deg, #06b6d4, #3b82f6); color: white; border: none; border-radius: 8px; padding: 9px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity .15s; }
-  button:hover { opacity: 0.9; }
+  button.primary { background: linear-gradient(135deg, #06b6d4, #3b82f6); color: white; border: none; border-radius: 8px; padding: 9px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity .15s; }
+  button.primary:hover { opacity: 0.9; }
   button:disabled { opacity: 0.5; cursor: not-allowed; }
   .quick { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-  .quick button { background: #1f2937; color: #9ca3af; padding: 4px 8px; font-size: 10px; font-weight: 500; }
-  .result { margin-top: 12px; padding: 10px; background: #111827; border: 1px solid #1f2937; border-radius: 8px; font-size: 12px; max-height: 320px; overflow-y: auto; }
+  .quick button { background: #1f2937; color: #9ca3af; padding: 4px 8px; font-size: 10px; font-weight: 500; border: none; border-radius: 6px; cursor: pointer; }
+  .scroll-area { flex: 1; overflow-y: auto; }
+  .result { margin-top: 12px; padding: 10px; background: #111827; border: 1px solid #1f2937; border-radius: 8px; font-size: 12px; }
+  body:not(.maximized) .result { max-height: 320px; overflow-y: auto; }
   .result-title { font-weight: 600; color: #06b6d4; margin-bottom: 6px; font-size: 12px; }
   .result-content { white-space: pre-wrap; line-height: 1.5; color: #d1d5db; }
   table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11px; }
   th, td { text-align: left; padding: 5px 6px; border-bottom: 1px solid #1f2937; }
   th { color: #06b6d4; font-weight: 600; text-transform: uppercase; font-size: 9px; letter-spacing: 0.5px; }
   td { color: #d1d5db; }
-  .copy-btn { margin-top: 8px; background: #1f2937; color: #9ca3af; padding: 5px 10px; font-size: 10px; }
+  .copy-btn { margin-top: 8px; background: #1f2937; color: #9ca3af; padding: 5px 10px; font-size: 10px; border: none; border-radius: 6px; cursor: pointer; }
   .loading { color: #6b7280; font-size: 12px; padding: 8px 0; display: flex; align-items: center; gap: 6px; }
   .spinner { width: 12px; height: 12px; border: 2px solid #1f2937; border-top-color: #06b6d4; border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -40,15 +47,24 @@
   .setup a { color: #06b6d4; }
   .keylink { font-size: 10px; color: #6b7280; margin-top: 8px; text-align: center; }
   .keylink a { color: #06b6d4; }
+  .tab-tag { font-size: 9px; color: #6b7280; margin-top: 4px; font-family: ui-monospace, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   ul { padding-left: 18px; margin-top: 4px; }
   li { margin: 3px 0; }
+  .history-list { margin-top: 10px; }
+  .history-item { padding: 6px 8px; background: #111827; border: 1px solid #1f2937; border-radius: 6px; margin-bottom: 4px; font-size: 11px; color: #9ca3af; cursor: pointer; }
+  .history-item:hover { border-color: #06b6d4; }
+  .history-item .who { color: #06b6d4; font-weight: 600; font-size: 9px; text-transform: uppercase; margin-right: 4px; }
 </style>
 </head>
 <body>
   <div class="header">
     <div class="logo">O</div>
     <div class="title">OmniFlow Copilot</div>
-    <div class="subtitle">v1.1</div>
+    <div class="subtitle" id="version">v1.2</div>
+    <div class="header-actions">
+      <button class="iconbtn" id="maxBtn" title="Maximize (open as window)">⛶</button>
+      <button class="iconbtn" id="closeBtn" title="Close">✕</button>
+    </div>
   </div>
 
   <div id="setup" style="display:none">
@@ -56,12 +72,12 @@
       <h3>🔑 Paste your access key</h3>
       <p>Get your key from your OmniFlow account → Browser Extension page. Each day of use costs <b>10 credits</b> or is free with Pro.</p>
       <input id="keyInput" placeholder="omf_..." />
-      <div class="row"><button id="saveKey" style="flex:1">Save Key</button></div>
+      <div class="row"><button class="primary" id="saveKey" style="flex:1">Save Key</button></div>
       <div class="keylink"><a href="#" id="getKeyLink">Get a key →</a></div>
     </div>
   </div>
 
-  <div id="main" style="display:none">
+  <div id="main" style="display:none; flex: 1; flex-direction: column; min-height: 0;">
     <textarea id="prompt" placeholder="What do you want me to do?
 
 Examples:
@@ -78,17 +94,22 @@ Examples:
 
     <div class="row">
       <label class="chk"><input type="checkbox" id="useScreenshot" checked /> Include screenshot</label>
-      <button id="run">Run</button>
+      <button class="primary" id="run">Run</button>
     </div>
 
-    <div id="output"></div>
+    <div class="tab-tag" id="tabTag"></div>
 
-    <div id="refineBox" style="display:none; margin-top:10px;">
-      <textarea id="refine" placeholder="Reply to tweak this output... (e.g. 'make row 3 shorter', 'change tone to casual')" style="min-height:54px;"></textarea>
-      <div class="row">
-        <label class="chk"><input type="checkbox" id="refineScreenshot" /> Re-capture screen</label>
-        <button id="refineBtn">Refine</button>
-        <button id="newBtn" style="background:#1f2937;">New</button>
+    <div class="scroll-area">
+      <div id="historyView" class="history-list"></div>
+      <div id="output"></div>
+
+      <div id="refineBox" style="display:none; margin-top:10px;">
+        <textarea id="refine" placeholder="Reply to tweak this output... (e.g. 'make row 3 shorter', 'change tone to casual')" style="min-height:54px;"></textarea>
+        <div class="row">
+          <label class="chk"><input type="checkbox" id="refineScreenshot" /> Re-capture screen</label>
+          <button class="primary" id="refineBtn">Refine</button>
+          <button class="iconbtn" id="newBtn" style="width:auto; padding: 0 10px;" title="Clear this tab's history">Clear</button>
+        </div>
       </div>
     </div>
 
